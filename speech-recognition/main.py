@@ -9,32 +9,22 @@ def connect():
     print('connection established')
 
 @sio.event
-def my_message(data):
-    print('message received with ', data)
-    sio.emit('my response', {'response': 'my response'})
-
-@sio.event
 def disconnect():
     print('disconnected from server')
     sio.disconnect()
 
-@sio.event
-def hello(arg):
-    print(arg)
-
 def speech_to_text():
-
-    filename = "machine-learning_speech-recognition.wav"
-
-    # initialize the recognizer
     r = sr.Recognizer()
-    # open the file
-    with sr.AudioFile(filename) as source:
-        # listen for the data (load audio to memory)
-        audio_data = r.record(source)
-        # recognize (convert from speech to text)
-        text = r.recognize_google(audio_data)
-        return text
+    with sr.Microphone() as source:
+        # read the audio data from the default microphone
+        print("Start recording...")
+        audio_data = r.record(source, duration=5)
+        print("Recognizing...")
+        # convert speech to text
+        recognition_response = r.recognize_google(audio_data, language="en-US", show_all=True)
+        recognition_response = list(map(lambda alternative : alternative['transcript'], recognition_response['alternative']))
+        return recognition_response
+
 
 if __name__ == '__main__':
     text = speech_to_text()
