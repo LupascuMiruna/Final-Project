@@ -27,7 +27,7 @@ def speech_to_text():
 
 
 if __name__ == '__main__':
-    text = speech_to_text()
+    alternatives = speech_to_text()
     sio.connect('http://localhost:3000')
-    sio.emit('onCommand', { 'text': text})
+    sio.emit('onCommand', { 'alternatives': alternatives })
     sio.wait()

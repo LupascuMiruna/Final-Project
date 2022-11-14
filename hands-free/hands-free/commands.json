@@ -1,0 +1,8 @@
+{
+    "undo": "undo",
+    "save": "save",
+    "close tab": "closeTab",
+    "start debug": "startDebug",
+    "continue debug": "continueDebug",
+    "stop debug": "stopDebug"
+}
