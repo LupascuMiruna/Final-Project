@@ -13,6 +13,18 @@ class Dispatcher {
                 this.executor[command]();
                 break;
             }
+            else{
+                const words = alternative.split(' ');
+                if (this.commands[words[0]]) {
+                    const command = this.commands[words[0]];
+                    words.shift();
+                    this.executor[command](words);
+                    break;
+                }
+
+
+
+            }
         }
     }
 }
