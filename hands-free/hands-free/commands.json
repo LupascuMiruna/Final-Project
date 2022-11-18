@@ -1,11 +1,39 @@
+
 {
-    "undo": "undo",
-    "save": "save",
-    "close tab": "closeTab",
-    "start debug": "startDebug",
-    "continue debug": "continueDebug",
-    "stop debug": "stopDebug",
-    "paste": "paste",
-    "open": "open"
+    "add": {
+        "file": "addFile",  
+        "comment": "addComment"
+    },
+    "close": {
+        "tab": "closeTab",
+        "window": "closeTab"
+    },
+    "create":{
+        "tab": "createTab"
+    },
+   
+
+    "open":{
+        "tag": "openTag"
+    },
+
+
+
+    "start":{
+        "debug": "startDebug"
+    },
+    "stop": {
+        "debug": "stopDebug"
+    },
+    "continue":{
+        "debug": "continueDebug"
+    },
+    "toggle":{
+        "breakpoint": "inlineBreakpoint"
+    },
+    "show":{
+        "hover": "showHoverDebug"
+    }
+    
     
 }
