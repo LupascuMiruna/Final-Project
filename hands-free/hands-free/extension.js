@@ -61,7 +61,7 @@ function activate(context) {
 		// socket.on('onMessage', function (data) {
 		// 	dispatcher.dispatch(data)
 		// });
-		const data = ["add comment smile today"]
+		const data = ["paste text"]
 		dispatcher.dispatch(data)
 		
 	});

@@ -9,8 +9,21 @@
         "window": "closeTab"
     },
     "create":{
-        "tab": "createTab"
+        "tab": "addFile"
     },
+    "move": {
+        "cursor": "moveCursor"
+    },
+    "select": {
+        "block": "selectBlock"
+    },
+    "copy": {
+        "text": "copyToClipboard"
+    },
+    "paste": {
+        "text": "pasteFromClipboard"
+    },
+    
    
 
     "open":{
@@ -34,6 +47,6 @@
     "show":{
         "hover": "showHoverDebug"
     }
-    
+   
     
 }

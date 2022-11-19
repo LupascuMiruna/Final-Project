@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 const _ = require('lodash');
-const { moveCursor } = require('readline');
+
+//const { moveCursor } = require('readline');
 _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
 class Executor {
@@ -23,8 +24,70 @@ class Executor {
         activeEditor.edit(editBuilder => {
             editBuilder.insert(cursorPosition, text)});
     }
-    // system function
 
+    showErrorMesage() {
+        vscode.window.showInformationMessage("Incorect format, please review the rules");
+    }
+    copyToClipboard() {
+        vscode.commands.executeCommand("editor.action.clipboardCutAction");
+    }
+
+
+    // line l ==> at the beggining
+    // column 0
+    // right/left up/down --> one step
+    moveCursor(argvs) { //line l, column c
+        const editor = vscode.window.activeTextEditor;
+        const cursorPosition = this.getCursorPosition();
+
+        var nextLine = cursorPosition.line;
+        var nextColumn = cursorPosition.character;
+
+        if(argvs[0] === "line") {
+            if (isNaN(parseInt(argvs[1]))) {
+                this.showErrorMesage();
+                return;
+            }
+            nextLine = parseInt(argvs[1]);
+            nextColumn = 0;
+        }else if (argvs[0] === "column") {
+            nextColumn = 0;
+        } else if (argvs[0] === "right") {
+            nextColumn += 1;
+        } else if (argvs[0] === "left") {
+           nextColumn = Math.max(nextColumn - 1, 0);
+        } else if (argvs[0] === "up") {
+            nextLine = Math.max(nextLine - 1, 0);
+         } else if (argvs[0] === "down") {
+            nextLine = nextLine + 1;
+         } else {
+            this.showErrorMesage();
+            return;
+         } 
+        
+        var newPosition = new vscode.Position(nextLine, nextColumn);
+        var newSelection = new vscode.Selection(newPosition, newPosition);
+        editor.selection = newSelection;
+    }
+
+    selectBlock(argvs){ //from line ls to line lf
+        const editor = vscode.window.activeTextEditor;
+        const startLine = parseInt(argvs[2]);
+        const stopLine = parseInt(argvs[5]);
+
+        if(isNaN(startLine) || isNaN(stopLine)){
+            this.showErrorMesage();
+            return;
+        }
+        const startPosition = new vscode.Position(startLine - 1, 0);
+        const stopPosition = new vscode.Position(stopLine, 0);
+        var newSelection = new vscode.Selection(startPosition, stopPosition);
+        editor.selection = newSelection;
+     }
+
+
+
+    // system function
     async undo() {
         this.getCurrentEditor();
 		await vscode.commands.executeCommand("undo");
@@ -43,7 +106,7 @@ class Executor {
     }
 
     // inserting text
-    async paste(){
+    async pasteFromClipboard(){
         var cursorPosition = this.getCursorPosition();
         var pastedContent = await vscode.env.clipboard.readText(); 
         this.insertText(cursorPosition, pastedContent);

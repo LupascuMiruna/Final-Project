@@ -24,3 +24,8 @@
             //         break;
             //     }
 
+
+de adaugat:
+terminal: ? comenzi in terminal
+comenzi legate de clase id
+css?
