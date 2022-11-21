@@ -2,7 +2,10 @@
 {
     "add": {
         "file": "addFile",  
-        "comment": "addComment"
+        "comment": "addCommentHTML",
+        "attribute": "addAttributeHTML",
+        "class": "addClassPython",
+        "method": "addMethodPython"
     },
     "close": {
         "tab": "closeTab",
@@ -28,6 +31,12 @@
 
     "open":{
         "tag": "openTag"
+    },
+    "go":{
+        "function": "goToFunctionPython"
+    },
+    "find":{
+        "all": "findSelectAllPython"
     },
 
 

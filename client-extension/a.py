@@ -1,15 +1,11 @@
-x = 12
+def a:
+    pass
 
-b = x * 2
+def b:
+    pass
 
-print(x)
-
-aaa
-kk
-aa
-
-
-
+def c:
+    pass
 
 
 

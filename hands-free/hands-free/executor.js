@@ -5,8 +5,12 @@ const _ = require('lodash');
 _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
 class Executor {
-    //auxiliar methods
+    
+    constructor(){
+        this.singleTags = ["area", "source", "br", "link", "input"]
+    }
 
+    //auxiliar methods
     async getCurrentEditor() {
         const editor = vscode.window.activeTextEditor;
 		await vscode.window.showTextDocument(editor.document);
@@ -36,7 +40,7 @@ class Executor {
     // line l ==> at the beggining
     // column 0
     // right/left up/down --> one step
-    moveCursor(argvs) { //line l, column c
+    moveCursor(argvs) { 
         const editor = vscode.window.activeTextEditor;
         const cursorPosition = this.getCursorPosition();
 
@@ -112,31 +116,51 @@ class Executor {
         this.insertText(cursorPosition, pastedContent);
     }
 
-    async addComment(argvs) { // at the moment just for html 
+    async addCommentHTML(argvs) { // add comment this is a comment 
         var cursorPosition = this.getCursorPosition();
         var content = argvs.join(" ")
         var compiled = _.template('<!--{{comment}}-->');
         const text = compiled({comment: content})
         this.insertText(cursorPosition, text)
-
     }
 
-    async openTag(argvs){
+    async addAttributeHTML(argvs) { //add attribute id equals login  !!!!trebuie sa vad unde il adaug pe linia curenta
         let cursorPosition = this.getCursorPosition();
-        let content = argvs[0];
-       
-        var compiled = _.template('<{{tag}}></{{tag}}>');
-        const text = compiled({ tag: content });
-        let lengthText = text.length
-        lengthText = (parseInt(lengthText/2))
+
+        const attribute = argvs[0];
+        const name = argvs.slice(2).join("-")
+
+        var compiled = _.template(' {{attribute}}="{{name}}"');
+        const text = compiled({ attribute: attribute, name: name});
 
         this.insertText(cursorPosition, text);
+    }
+
+    async openTag(argvs){ //open tag div
+        let cursorPosition = this.getCursorPosition();
+        let tag = argvs[0];
+        var compiled = NaN;
+        var isSingleTag = false;
+        var compiled = _.template('<{{tag}}></{{tag}}>');
+
+        if(this.singleTags.includes(tag)){
+            var compiled = _.template('<{{tag}}>');
+            isSingleTag = true;
+        } 
+
+        const text = compiled({ tag: tag });
+        this.insertText(cursorPosition, text);
+        if(isSingleTag) {
+            return;
+        }
+        
+        
+        let lengthText = text.length;
+        lengthText = (parseInt(lengthText/2))
+
         var p = new vscode.Position(0,lengthText);
         var s = new vscode.Selection(p, p);
         vscode.window.activeTextEditor.selection = s;
-        
-        cursorPosition = this.getCursorPosition();
-        const x = 1;
     }
 
     //Debugging
@@ -165,7 +189,66 @@ class Executor {
     addFile() {
         console.log("addFile")
     }
-  
+
+
+
+    //Python
+    async addClassPython(argvs) { // toDo go down and type pass
+        var cursorPosition = this.getCursorPosition();
+        const className = _.capitalize(_.camelCase(argvs.join(" ")));
+        
+        var compiled = _.template('class {{className}}:');
+        const text = compiled({ className: className});
+
+        this.insertText(cursorPosition, text);
+    }
+
+    async addMethodPython(argvs) {
+        var cursorPosition = this.getCursorPosition();
+        const methodName = _.camelCase(argvs.join(" "));
+
+        var compiled =  _.template('def {{methodName}}(self):');
+        const text = compiled({ methodName: methodName});
+
+        this.insertText(cursorPosition, text);
+    }
+
+     // find & select
+    //https://stackoverflow.com/questions/67934437/vscode-is-there-any-api-to-get-search-results
+    //https://javascript.info/regexp-introduction
+    async findSelectAllPython(argvs) {
+        const editor = vscode.workspace.textDocuments[0];///de 0???????????????????????????????????????
+        const allText = editor.getText();
+        var matches = [...allText.matchAll(new RegExp(argvs[0], "gm"))];
+        var foundSelections = []
+
+        var activeText = vscode.window.activeTextEditor;
+
+        matches.forEach((match, index) => {
+            var startPosition = activeText.document.positionAt(match.index);
+            var endPosition = activeText.document.positionAt(match.index + match[0].length);
+            foundSelections[index] = new vscode.Selection(startPosition, endPosition);
+        });
+        activeText.selection = foundSelections[0];
+    }
+
+    // toDo: find regex for function name
+    goToFunctionPython(argvs) {
+        const functionName = "def " + _.camelCase(argvs.join(" "));
+
+        const editor = vscode.workspace.textDocuments[0];///de 0???????????????????????????????????????
+        const allText = editor.getText();
+        var matches = [...allText.matchAll(new RegExp("def", "gm"))];
+
+        var activeText = vscode.window.activeTextEditor;
+
+        matches.forEach((match, index) => {
+            var startPosition = activeText.document.positionAt(match.index);
+            //var endPosition = activeText.document.positionAt(match.index + match[0].length);
+            var newSelection = new vscode.Selection(startPosition, startPosition);
+            activeText.selection = newSelection;
+        });
+    }
 }
 
 module.exports = Executor

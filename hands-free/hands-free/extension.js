@@ -61,7 +61,7 @@ function activate(context) {
 		// socket.on('onMessage', function (data) {
 		// 	dispatcher.dispatch(data)
 		// });
-		const data = ["paste text"]
+		const data = ["go function b"]
 		dispatcher.dispatch(data)
 		
 	});

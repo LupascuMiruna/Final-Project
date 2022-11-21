@@ -29,3 +29,22 @@ de adaugat:
 terminal: ? comenzi in terminal
 comenzi legate de clase id
 css?
+
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/address
+
+!!!!press enter
+!!!! add pass after method, class
+!!!! iterate through the whole file
+
+delete row/word
+function with lodash camelcase, snake case..
+
+
+
+single tags: area, source, br, link, input
+-href=
+-id=, class
+-source= , type, 
+
+regex:
+https://javascript.info/regexp-introduction
