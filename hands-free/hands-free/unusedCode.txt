@@ -36,6 +36,12 @@ https://developer.mozilla.org/en-US/docs/Web/HTML/Element/address
 !!!! add pass after method, class
 !!!! iterate through the whole file
 
+!!!remove cursorPosition from parameters in insertText function
+!!! what to do at add param when more we need , --> when are more params
+
+!!! how to transform numbers from letters in digits
+
+
 delete row/word
 function with lodash camelcase, snake case..
 

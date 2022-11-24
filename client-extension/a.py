@@ -1,11 +1,13 @@
-def a:
+def alaBala:
     pass
 
-def b:
-    pass
+def b():
+    ala_bala
 
 def c:
     pass
 
+def alaBala:
 
+ala_bala
 

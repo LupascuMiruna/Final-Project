@@ -5,7 +5,8 @@
         "comment": "addCommentHTML",
         "attribute": "addAttributeHTML",
         "class": "addClassPython",
-        "method": "addMethodPython"
+        "method": "addMethodPython",
+        "parameter": "addParameterPython"
     },
     "close": {
         "tab": "closeTab",
@@ -33,7 +34,8 @@
         "tag": "openTag"
     },
     "go":{
-        "function": "goToFunctionPython"
+        "function": "goToFunctionPython",
+        "character": "moveCursorToCharacter"
     },
     "find":{
         "all": "findSelectAllPython"

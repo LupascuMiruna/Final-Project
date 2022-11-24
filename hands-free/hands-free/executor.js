@@ -7,7 +7,8 @@ _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 class Executor {
     
     constructor(){
-        this.singleTags = ["area", "source", "br", "link", "input"]
+        this.singleTags = ["area", "source", "br", "link", "input"];
+        this.expressions = {"equal": "=", "equals": "=", "not": "!", "lees": "<", "greater": ">"}; //less or equal
     }
 
     //auxiliar methods
@@ -212,16 +213,8 @@ class Executor {
 
         this.insertText(cursorPosition, text);
     }
-
-     // find & select
-    //https://stackoverflow.com/questions/67934437/vscode-is-there-any-api-to-get-search-results
-    //https://javascript.info/regexp-introduction
-    async findSelectAllPython(argvs) {
-        const editor = vscode.workspace.textDocuments[0];///de 0???????????????????????????????????????
-        const allText = editor.getText();
-        var matches = [...allText.matchAll(new RegExp(argvs[0], "gm"))];
-        var foundSelections = []
-
+    matchRegex(matches) {
+        var foundSelections = [];
         var activeText = vscode.window.activeTextEditor;
 
         matches.forEach((match, index) => {
@@ -229,25 +222,86 @@ class Executor {
             var endPosition = activeText.document.positionAt(match.index + match[0].length);
             foundSelections[index] = new vscode.Selection(startPosition, endPosition);
         });
+        return foundSelections;
+    }
+
+     // find & select
+    //https://stackoverflow.com/questions/67934437/vscode-is-there-any-api-to-get-search-results
+    //https://javascript.info/regexp-introduction
+    async findSelectAllPython(argvs) { //if function --> camel case, if parameter --> snake case
+        const editor = vscode.workspace.textDocuments[0];///de 0???????????????????????????????????????
+        const allText = editor.getText();
+        var objectToFind = argvs.slice(1).join(" ");
+
+        if(argvs[0] === "functions"){
+            objectToFind = _.camelCase(objectToFind);
+        }
+        else if(argvs[0] === "variables"){
+            objectToFind = _.snakeCase(objectToFind);
+        }
+        else {
+            this.showErrorMesage();
+        }
+
+        var matches = [...allText.matchAll(new RegExp(`${objectToFind}`, "gm"))];
+        var foundSelections = this.matchRegex(matches)
+        var activeText = vscode.window.activeTextEditor;
         activeText.selection = foundSelections[0];
     }
 
     // toDo: find regex for function name
     goToFunctionPython(argvs) {
         const functionName = "def " + _.camelCase(argvs.join(" "));
-
-        const editor = vscode.workspace.textDocuments[0];///de 0???????????????????????????????????????
+        const editor = vscode.workspace.textDocuments[0];
         const allText = editor.getText();
-        var matches = [...allText.matchAll(new RegExp("def", "gm"))];
+        var matches = [...allText.matchAll(new RegExp(`${functionName}`, "gm"))];
 
         var activeText = vscode.window.activeTextEditor;
 
         matches.forEach((match, index) => {
             var startPosition = activeText.document.positionAt(match.index);
-            //var endPosition = activeText.document.positionAt(match.index + match[0].length);
             var newSelection = new vscode.Selection(startPosition, startPosition);
             activeText.selection = newSelection;
         });
+    }
+
+    //search in text some specific character --> !! at the moment after (
+    moveCursorAfterCharacter() {
+        const editor = vscode.workspace.textDocuments[0];
+        const allText = editor.getText();
+        const regexp = /(?<=\()/g; //for (
+        var matches = [...allText.matchAll(regexp)];
+
+        var activeText = vscode.window.activeTextEditor;
+
+        matches.forEach((match, index) => {
+            var startPosition = activeText.document.positionAt(match.index);
+            var newSelection = new vscode.Selection(startPosition, startPosition);
+            activeText.selection = newSelection;
+        });
+
+    }
+
+    addParameterPython(argvs) {
+        //we are already in the function header --> search parameters and insert on the first position
+        const parameterName = _.snakeCase(argvs.join(" "));
+        this.moveCursorAfterCharacter()
+        var cursorPosition = this.getCursorPosition();
+        this.insertText(cursorPosition, parameterName)
+    }
+
+    evaluateExpressionPython(currentExpression) {  // i not equal zero --> i != 0
+        var modifiedExpression = "";
+        for (index in currentExpression) {
+            var word = currentExpression[index]
+            if(this.expressions[word]){
+              modifiedExpression = modifiedExpression.concat(this.expressions[word]);
+            }
+          else{
+            modifiedExpression = modifiedExpression.concat(word)
+          }
+        }
+        return modifiedExpression;
     }
 }
 
