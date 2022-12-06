@@ -2,10 +2,10 @@
 {
     "add": {
         "file": "addFile",  
-        "comment": "addCommentHTML",
-        "attribute": "addAttributeHTML",
-        "class": "addClassPython",
-        "method": "addMethodPython",
+        "comment": "addComment",
+        "attribute": "addAttribute",
+        "class": "addClass",
+        "method": "addMethod",
         "parameter": "addParameterPython"
     },
     "close": {
@@ -34,7 +34,7 @@
         "tag": "openTag"
     },
     "go":{
-        "function": "goToFunctionPython",
+        "function": "goToFunction",
         "character": "moveCursorToCharacter"
     },
     "find":{

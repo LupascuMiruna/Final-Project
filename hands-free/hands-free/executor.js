@@ -1,5 +1,9 @@
 const vscode = require('vscode');
 const _ = require('lodash');
+const HtmlExecutor = require('./htmlExecutor');
+const PythonExecutor = require('./pythonExecutor');
+const { argv } = require('process');
+
 
 //const { moveCursor } = require('readline');
 _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
@@ -7,11 +11,33 @@ _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 class Executor {
     
     constructor(){
-        this.singleTags = ["area", "source", "br", "link", "input"];
+       
         this.expressions = {"equal": "=", "equals": "=", "not": "!", "lees": "<", "greater": ">"}; //less or equal
+        this.instances = {
+          html: new HtmlExecutor(),
+          python:  new PythonExecutor()
+        }
+        this.currentLanguage = NaN
     }
 
     //auxiliar methods
+    async getEditorState() {
+        const language = vscode.window.activeTextEditor.document.languageId;
+        var filename = vscode.window.activeTextEditor.document.fileName;
+        this.currentLanguage = language;
+    }
+
+    async addComment(argvs) {
+        this.getEditorState();
+        if(this.instances[this.currentLanguage]){
+            const text = this.instances[this.currentLanguage].addComment(argvs)
+            this.insertText(text)
+        }
+        else {
+            console.log("Not possible to add comment for this language");
+        }
+    }
+
     async getCurrentEditor() {
         const editor = vscode.window.activeTextEditor;
 		await vscode.window.showTextDocument(editor.document);
@@ -20,12 +46,12 @@ class Executor {
     getCursorPosition() {
         let activeEditor = vscode.window.activeTextEditor;
         let cursorPosition = activeEditor.selection.active;
-
         return cursorPosition
     }
 
-    insertText(cursorPosition, text) {
-        let activeEditor = vscode.window.activeTextEditor;
+    insertText(text) {
+        var activeEditor = vscode.window.activeTextEditor;
+        var cursorPosition = this.getCursorPosition()
         activeEditor.edit(editBuilder => {
             editBuilder.insert(cursorPosition, text)});
     }
@@ -112,56 +138,50 @@ class Executor {
 
     // inserting text
     async pasteFromClipboard(){
-        var cursorPosition = this.getCursorPosition();
         var pastedContent = await vscode.env.clipboard.readText(); 
-        this.insertText(cursorPosition, pastedContent);
+        this.insertText(pastedContent);
     }
 
-    async addCommentHTML(argvs) { // add comment this is a comment 
-        var cursorPosition = this.getCursorPosition();
-        var content = argvs.join(" ")
-        var compiled = _.template('<!--{{comment}}-->');
-        const text = compiled({comment: content})
-        this.insertText(cursorPosition, text)
-    }
+    // async addCommentHTML(argvs) { // add comment this is a comment 
+    //     var cursorPosition = this.getCursorPosition();
+    //     var content = argvs.join(" ")
+    //     var compiled = _.template('<!--{{comment}}-->');
+    //     const text = compiled({comment: content})
+    //     this.insertText(cursorPosition, text)
+    // }
 
-    async addAttributeHTML(argvs) { //add attribute id equals login  !!!!trebuie sa vad unde il adaug pe linia curenta
-        let cursorPosition = this.getCursorPosition();
-
-        const attribute = argvs[0];
-        const name = argvs.slice(2).join("-")
-
-        var compiled = _.template(' {{attribute}}="{{name}}"');
-        const text = compiled({ attribute: attribute, name: name});
-
-        this.insertText(cursorPosition, text);
+    async addAttribute(argvs) { //add attribute id equals login  !!!!trebuie sa vad unde il adaug pe linia curenta
+        this.getEditorState();
+        if(this.instances[this.currentLanguage]) {
+            const text = this.instances[this.currentLanguage].addAttribute(argvs)
+            this.insertText(text);
+        }
+        else{
+            console.log("doesn't exist")
+        }
+      
     }
 
     async openTag(argvs){ //open tag div
-        let cursorPosition = this.getCursorPosition();
-        let tag = argvs[0];
-        var compiled = NaN;
-        var isSingleTag = false;
-        var compiled = _.template('<{{tag}}></{{tag}}>');
+        this.getEditorState();
+        if(this.instances[this.currentLanguage]) {
+            const {text, isSingleTag }= this.instances[this.currentLanguage].openTag(argvs)
+            this.insertText( text);
 
-        if(this.singleTags.includes(tag)){
-            var compiled = _.template('<{{tag}}>');
-            isSingleTag = true;
-        } 
+            if(isSingleTag) {
+                return;
+            }
 
-        const text = compiled({ tag: tag });
-        this.insertText(cursorPosition, text);
-        if(isSingleTag) {
-            return;
+            let lengthText = text.length;
+            lengthText = (parseInt(lengthText/2))
+
+            var p = new vscode.Position(0,lengthText);
+            var s = new vscode.Selection(p, p);
+            vscode.window.activeTextEditor.selection = s;
         }
-        
-        
-        let lengthText = text.length;
-        lengthText = (parseInt(lengthText/2))
-
-        var p = new vscode.Position(0,lengthText);
-        var s = new vscode.Selection(p, p);
-        vscode.window.activeTextEditor.selection = s;
+        else {
+            console.log("nop");
+        }
     }
 
     //Debugging
@@ -191,27 +211,28 @@ class Executor {
         console.log("addFile")
     }
 
-
-
-    //Python
-    async addClassPython(argvs) { // toDo go down and type pass
-        var cursorPosition = this.getCursorPosition();
-        const className = _.capitalize(_.camelCase(argvs.join(" ")));
-        
-        var compiled = _.template('class {{className}}:');
-        const text = compiled({ className: className});
-
-        this.insertText(cursorPosition, text);
+    async addClass(argvs) { // toDo go down and type pass
+        this.getEditorState();
+        if(this.instances[this.currentLanguage]) {
+            
+            const text = this.instances[this.currentLanguage].addClass(argvs);
+            this.insertText(text);
+        }
+        else {
+            console.log("nop");
+        }
     }
 
-    async addMethodPython(argvs) {
-        var cursorPosition = this.getCursorPosition();
-        const methodName = _.camelCase(argvs.join(" "));
-
-        var compiled =  _.template('def {{methodName}}(self):');
-        const text = compiled({ methodName: methodName});
-
-        this.insertText(cursorPosition, text);
+    async addMethod(argvs) {
+        this.getEditorState();
+        if(this.instances[this.currentLanguage]){
+            const text = this.instances[this.currentLanguage].addMethod(argvs);
+            this.insertText(text);
+        }
+        else {
+            console.log("nop");
+        }
+      
     }
     matchRegex(matches) {
         var foundSelections = [];
@@ -250,19 +271,25 @@ class Executor {
     }
 
     // toDo: find regex for function name
-    goToFunctionPython(argvs) {
-        const functionName = "def " + _.camelCase(argvs.join(" "));
-        const editor = vscode.workspace.textDocuments[0];
-        const allText = editor.getText();
-        var matches = [...allText.matchAll(new RegExp(`${functionName}`, "gm"))];
-
-        var activeText = vscode.window.activeTextEditor;
-
-        matches.forEach((match, index) => {
-            var startPosition = activeText.document.positionAt(match.index);
-            var newSelection = new vscode.Selection(startPosition, startPosition);
-            activeText.selection = newSelection;
-        });
+    goToFunction(argvs) {
+        this.getEditorState();
+        if(this.instances[this.currentLanguage]){
+            const functionName = this.instances[this.currentLanguage].goToFunction(argvs)
+            const editor = vscode.workspace.textDocuments[0];
+            const allText = editor.getText();
+            var matches = [...allText.matchAll(new RegExp(`${functionName}`, "gm"))];
+    
+            var activeText = vscode.window.activeTextEditor;
+    
+            matches.forEach((match, index) => {
+                var startPosition = activeText.document.positionAt(match.index);
+                var newSelection = new vscode.Selection(startPosition, startPosition);
+                activeText.selection = newSelection;
+            });
+        }
+        else {
+            console.log("Not possible to go to function for this language");
+        }
     }
 
     //search in text some specific character --> !! at the moment after (
@@ -282,12 +309,19 @@ class Executor {
 
     }
 
-    addParameterPython(argvs) {
+    addParameter(argvs) {//////////////////////??????????????????????????
         //we are already in the function header --> search parameters and insert on the first position
-        const parameterName = _.snakeCase(argvs.join(" "));
-        this.moveCursorAfterCharacter()
-        var cursorPosition = this.getCursorPosition();
-        this.insertText(cursorPosition, parameterName)
+        this.getEditorState();
+        if(this.instances[this.currentLanguage]){
+            const parameterName = this.instances[this.currentLanguage].addParameter(argvs);
+
+            this.moveCursorAfterCharacter();
+            this.insertText(parameterName);
+        }
+        else {
+            console.log("nop");
+        }
+      
     }
 
     evaluateExpressionPython(currentExpression) {  // i not equal zero --> i != 0

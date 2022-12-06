@@ -2,7 +2,7 @@ const vscode = require('vscode');
 const io = require('socket.io-client');
 
 const Dispatcher = require('./dispatcher');
-const Executor =require('./executor');
+const Executor = require('./executor');
 const Client = require('./client');
 
 
@@ -61,7 +61,7 @@ function activate(context) {
 		// socket.on('onMessage', function (data) {
 		// 	dispatcher.dispatch(data)
 		// });
-		const data = ["add parameter lala bala"]
+		const data = ["add method smile me"]
 		dispatcher.dispatch(data)
 		
 	});
