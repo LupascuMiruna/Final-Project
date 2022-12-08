@@ -1,29 +1,3 @@
-{
-    "undo": "undo",
-    "save": "save",
-    "close tab": "closeTab",
-    "start debug": "startDebug",
-    "continue debug": "continueDebug",
-    "stop debug": "stopDebug",
-    "paste": "paste",
-    "open": "open"
-    
-}
-
- // if (this.commands[alternative]) {
-            //     const command = this.commands[alternative];
-            //     this.executor[command]();
-            //     break;
-            // }
-            // else{
-            //     const words = alternative.split(' ');
-            //     if (this.commands[words[0]]) {
-            //         const command = this.commands[words[0]];
-            //         words.shift();
-            //         this.executor[command](words);
-            //         break;
-            //     }
-
 
 de adaugat:
 terminal: ? comenzi in terminal
@@ -36,7 +10,6 @@ https://developer.mozilla.org/en-US/docs/Web/HTML/Element/address
 !!!! add pass after method, class
 !!!! iterate through the whole file
 
-!!!remove cursorPosition from parameters in insertText function
 !!! what to do at add param when more we need , --> when are more params
 
 !!! how to transform numbers from letters in digits
@@ -45,12 +18,15 @@ https://developer.mozilla.org/en-US/docs/Web/HTML/Element/address
 delete row/word
 function with lodash camelcase, snake case..
 
+---nu merge next/previous tab
+- nu merge sa pun nume la fisier nou creat
 
-
-single tags: area, source, br, link, input
--href=
--id=, class
--source= , type, 
 
 regex:
 https://javascript.info/regexp-introduction
+https://regexr.com/
+https://www.youtube.com/watch?v=rhzKDrUiJVk
+
+command shortcuts ---> de vazut fiecare cum sunt apelate
+de documentat s planuit urmatoarele sprinturi
+de testat e2e

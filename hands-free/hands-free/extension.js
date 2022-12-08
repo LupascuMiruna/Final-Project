@@ -61,7 +61,7 @@ function activate(context) {
 		// socket.on('onMessage', function (data) {
 		// 	dispatcher.dispatch(data)
 		// });
-		const data = ["add method smile me"]
+		const data = ["test test"]
 		dispatcher.dispatch(data)
 		
 	});

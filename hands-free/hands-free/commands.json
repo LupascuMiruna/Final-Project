@@ -16,7 +16,11 @@
         "tab": "addFile"
     },
     "move": {
-        "cursor": "moveCursor"
+        "cursor": "moveCursor",
+        "line": {
+            "down": "moveLineDown",
+            "up": "moveLineUp"
+        }
     },
     "select": {
         "block": "selectBlock"
@@ -27,7 +31,16 @@
     "paste": {
         "text": "pasteFromClipboard"
     },
-    
+    "indent": {
+        "line": "indentLine"
+    },
+    "outdent": {
+        "outdent": "outdentLine"
+    },
+    "save": {
+        "file": "saveFile",
+        "all": "saveAllFiles"
+    },
    
 
     "open":{
@@ -35,7 +48,13 @@
     },
     "go":{
         "function": "goToFunction",
-        "character": "moveCursorToCharacter"
+        "character": "moveCursorToCharacter",
+        "next": {
+            "tab": "goNextTab"
+        },
+        "previous": {
+            "tab": "goPreviousTab"
+        }
     },
     "find":{
         "all": "findSelectAllPython"
@@ -56,8 +75,15 @@
         "breakpoint": "inlineBreakpoint"
     },
     "show":{
-        "hover": "showHoverDebug"
+        "hover": "showHoverDebug",
+        "preview": "markdownShowPreview"
+    },
+
+    "test": {
+        "test": "test"
     }
+
+
    
     
 }

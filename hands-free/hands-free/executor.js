@@ -20,6 +20,45 @@ class Executor {
         this.currentLanguage = NaN
     }
 
+    test(){
+        const extensionPath1 = vscode.window.activeTextEditor.document.uri.fsPath
+        const filename = vscode.window.activeTextEditor.document.fileName;
+        const currentFolder1 = vscode.workspace.workspaceFolders[0].uri.path;
+        const currentFolder2 = vscode.workspace.workspaceFolders[0].uri.fsPath;
+
+        // vscode.commands.executeCommand("markdown.showPreviewToSide");
+        vscode.commands.executeCommand("workbench.files.action.showActiveFileInExplorer");
+    }
+    markdownShowPreview(){
+        vscode.commands.executeCommand("markdown.showPreview");
+    }
+    indentLine() {
+        vscode.commands.executeCommand("editor.action.indentLines");
+    }
+    outdentLine() {
+        vscode.commands.executeCommand("editor.action.outdentLines");
+    }
+    moveLineDown() {
+        vscode.commands.executeCommand("editor.action.moveLinesDownAction");
+    }
+    moveLineUp() {
+        vscode.commands.executeCommand("editor.action.moveLinesUpAction");
+    }
+
+    
+    
+
+    async goNextTab(){
+        this.getCurrentEditor();
+        await vscode.commands.executeCommand("workbench.action.nextEditor");
+        console.log(1);
+    }
+    async goPreviousTab(){
+        this.getCurrentEditor();
+        await vscode.commands.executeCommand("workbench.action.previousEditor");
+        console.log(1);
+    }
+
     //auxiliar methods
     async getEditorState() {
         const language = vscode.window.activeTextEditor.document.languageId;
@@ -123,9 +162,12 @@ class Executor {
         this.getCurrentEditor();
 		await vscode.commands.executeCommand("undo");
     }
-    async save() {
+    async saveFile() {
         this.getCurrentEditor();
         await vscode.commands.executeCommand("workbench.action.files.save");
+    }
+    async saveAllFiles() {
+        await vscode.commands.executeCommand("workbench.action.files.saveFiles");
     }
     async closeTab() {
         this.getCurrentEditor();
@@ -217,6 +259,8 @@ class Executor {
             
             const text = this.instances[this.currentLanguage].addClass(argvs);
             this.insertText(text);
+            this.moveCursor(["down"]);
+            this.insertText("pass");
         }
         else {
             console.log("nop");
@@ -228,6 +272,8 @@ class Executor {
         if(this.instances[this.currentLanguage]){
             const text = this.instances[this.currentLanguage].addMethod(argvs);
             this.insertText(text);
+            this.moveCursor(["down"]);
+            this.insertText("pass");
         }
         else {
             console.log("nop");
