@@ -70,11 +70,13 @@ def alaBala():
     pass
 
 def b():
-print(1)
-print(2)
+    print(1)
+    print(2)
 
 def c():
-pass
+    pass
 
+
+b()
 
 

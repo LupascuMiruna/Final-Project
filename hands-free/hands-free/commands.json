@@ -26,8 +26,17 @@
         "block": "selectBlock"
     },
     "copy": {
-        "text": "copyToClipboard"
+        "text": "copyToClipboard",
+        "line": {
+            "down": "copyLineDown",
+            "up":"copyLineUp"
+        },
+        "path": "copyPath"
     },
+    "cut": {
+        "text": "cutText"
+    },
+
     "paste": {
         "text": "pasteFromClipboard"
     },
@@ -41,10 +50,18 @@
         "file": "saveFile",
         "all": "saveAllFiles"
     },
+    "delete": {
+        "line": "deleteLine"
+    },
+
    
 
     "open":{
-        "tag": "openTag"
+        "tag": "openTag",
+        "terminal": "openTerminal"
+    },
+    "clear":{
+        "terminal": "clearTerminal"
     },
     "go":{
         "function": "goToFunction",
@@ -54,12 +71,13 @@
         },
         "previous": {
             "tab": "goPreviousTab"
-        }
+        },
+        "definition": "goToDefinition"
     },
     "find":{
         "all": "findSelectAllPython"
     },
-
+    
 
 
     "start":{

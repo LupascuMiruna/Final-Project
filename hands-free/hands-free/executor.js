@@ -20,15 +20,34 @@ class Executor {
         this.currentLanguage = NaN
     }
 
-    test(){
+    async test(){
         const extensionPath1 = vscode.window.activeTextEditor.document.uri.fsPath
         const filename = vscode.window.activeTextEditor.document.fileName;
         const currentFolder1 = vscode.workspace.workspaceFolders[0].uri.path;
         const currentFolder2 = vscode.workspace.workspaceFolders[0].uri.fsPath;
 
         // vscode.commands.executeCommand("markdown.showPreviewToSide");
-        vscode.commands.executeCommand("workbench.files.action.showActiveFileInExplorer");
+         await vscode.commands.executeCommand("editor.action.revealDefinition");
     }
+    async openTerminal(){
+        await vscode.commands.executeCommand("workbench.action.files.openNativeConsole");
+    }
+    async clearTerminal(){
+        await vscode.commands.executeCommand("workbench.action.terminal.clear");
+    }
+
+    async copyLineDown(){
+        await vscode.commands.executeCommand("editor.action.copyLinesDownAction");
+    }
+    async copyLineUp(){
+        await vscode.commands.executeCommand("editor.action.copyLinesUpAction");
+    }
+    async copyPath(){
+        await vscode.commands.executeCommand("workbench.action.files.copyPathOfActiveFile");
+    }
+
+
+
     markdownShowPreview(){
         vscode.commands.executeCommand("markdown.showPreview");
     }
@@ -43,6 +62,9 @@ class Executor {
     }
     moveLineUp() {
         vscode.commands.executeCommand("editor.action.moveLinesUpAction");
+    }
+    deleteLine() {
+        vscode.commands.executeCommand("editor.action.deleteLines");
     }
 
     
@@ -101,6 +123,10 @@ class Executor {
     copyToClipboard() {
         vscode.commands.executeCommand("editor.action.clipboardCutAction");
     }
+    async cutText(){
+        await vscode.commands.executeCommand("editor.action.clipboardCutAction");
+    }
+    
 
 
     // line l ==> at the beggining

@@ -30,3 +30,5 @@ https://www.youtube.com/watch?v=rhzKDrUiJVk
 command shortcuts ---> de vazut fiecare cum sunt apelate
 de documentat s planuit urmatoarele sprinturi
 de testat e2e
+
+de facut sa mearga voice recognition
