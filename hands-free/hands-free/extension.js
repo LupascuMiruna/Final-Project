@@ -13,6 +13,8 @@ const dispatcher = new Dispatcher(executor);
 // const client = new Client(dispatcher);
 
 
+
+////////////
 // const socket = io.connect('http://localhost:3000', {reconnect: true});
 
 // // Add a connect listener
@@ -22,7 +24,8 @@ const dispatcher = new Dispatcher(executor);
 // const executor = new Executor();
 // const dispatcher = new Dispatcher(executor);
 // socket.on('onMessage', function (data) {
-// 			dispatcher.dispatch(data.alternatives)
+// 			console.log(data);
+// 			dispatcher.dispatch(data.alternatives);
 // 		});
 
 // This method is called when your extension is activated
@@ -61,8 +64,8 @@ function activate(context) {
 		// socket.on('onMessage', function (data) {
 		// 	dispatcher.dispatch(data)
 		// });
-		const data = ["test test"]
-		dispatcher.dispatch(data)
+		const data = ["close file"];
+		dispatcher.dispatch(data);
 		
 	});
 

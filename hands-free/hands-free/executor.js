@@ -2,10 +2,6 @@ const vscode = require('vscode');
 const _ = require('lodash');
 const HtmlExecutor = require('./htmlExecutor');
 const PythonExecutor = require('./pythonExecutor');
-const { argv } = require('process');
-
-
-//const { moveCursor } = require('readline');
 _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
 class Executor {
@@ -18,16 +14,63 @@ class Executor {
           python:  new PythonExecutor()
         }
         this.currentLanguage = NaN
-    }
+    }  
 
-    async test(){
+    async test(argvs, context){
         const extensionPath1 = vscode.window.activeTextEditor.document.uri.fsPath
         const filename = vscode.window.activeTextEditor.document.fileName;
         const currentFolder1 = vscode.workspace.workspaceFolders[0].uri.path;
         const currentFolder2 = vscode.workspace.workspaceFolders[0].uri.fsPath;
+    }
 
-        // vscode.commands.executeCommand("markdown.showPreviewToSide");
-         await vscode.commands.executeCommand("editor.action.revealDefinition");
+    createFilePath(argvs){
+        const currentFolder = vscode.workspace.workspaceFolders[0].uri.path;
+        const languageToExtension = {
+            "python": "py",
+            "txt": "txt",
+        }
+        var filePath = NaN;
+        if (languageToExtension[argvs[0]]) {
+            const fileExtension = languageToExtension[argvs[0]]
+            const fileName = _.camelCase(argvs.slice(1))
+            filePath = currentFolder + '/' + fileName + '.' + fileExtension;
+        }
+        return filePath;
+    }
+
+    async createFile(argvs) { //create file txt first file  / create file python main
+        const filePath = this.createFilePath(argvs);
+        if (filePath != NaN) {
+            await vscode.workspace.fs.writeFile(vscode.Uri.parse(filePath), new TextEncoder().encode(''));
+            await vscode.window.showTextDocument(vscode.Uri.file(filePath));
+        } else {
+            this.showErrorMesage();
+        }
+
+    }
+
+    async openFile(argvs){
+        const filePath = this.createFilePath(argvs)
+        if (filePath != NaN) {
+            await vscode.window.showTextDocument(vscode.Uri.file(filePath));
+        } else {
+            this.showErrorMesage();
+        }
+    }
+
+    async quickOpen() {
+        await vscode.commands.executeCommand("workbench.action.quickOpen");
+        // await vscode.commands.executeCommand("workbench.action.quickOpenPreviousRecentlyUsedEditor");
+        // select command
+        // enter command
+    }
+
+    async openCurrentFolder(){
+        await vscode.commands.executeCommand("workbench.action.files.openFolderInNewWindow");
+    }
+
+    async insertTab() {
+        await vscode.commands.executeCommand("tab");
     }
     async openTerminal(){
         await vscode.commands.executeCommand("workbench.action.files.openNativeConsole");
@@ -67,24 +110,9 @@ class Executor {
         vscode.commands.executeCommand("editor.action.deleteLines");
     }
 
-    
-    
-
-    async goNextTab(){
-        this.getCurrentEditor();
-        await vscode.commands.executeCommand("workbench.action.nextEditor");
-        console.log(1);
-    }
-    async goPreviousTab(){
-        this.getCurrentEditor();
-        await vscode.commands.executeCommand("workbench.action.previousEditor");
-        console.log(1);
-    }
-
     //auxiliar methods
     async getEditorState() {
         const language = vscode.window.activeTextEditor.document.languageId;
-        var filename = vscode.window.activeTextEditor.document.fileName;
         this.currentLanguage = language;
     }
 
@@ -115,6 +143,28 @@ class Executor {
         var cursorPosition = this.getCursorPosition()
         activeEditor.edit(editBuilder => {
             editBuilder.insert(cursorPosition, text)});
+    }
+
+    typeTextDocument(argvs) {
+        var content = argvs.join(" ");
+        this.insertText(content);
+    }
+
+    async runActiveFile(){
+        this.getEditorState();
+        if(this.instances[this.currentLanguage]){
+            this.instances[this.currentLanguage].runActiveFile();
+          
+        }
+        else {
+            console.log("Not possible to run for this language");
+        }
+    }
+    async typeCommandTerminal(argvs) {
+        const content = argvs.join(" ")
+        const terminal = vscode.window.activeTerminal;
+        console.log(terminal)
+        await terminal.sendText(content);
     }
 
     showErrorMesage() {
@@ -181,7 +231,9 @@ class Executor {
         editor.selection = newSelection;
      }
 
-
+    async goToDefinition(){
+        await vscode.commands.executeCommand("editor.action.revealDefinition");
+    }
 
     // system function
     async undo() {
@@ -195,13 +247,9 @@ class Executor {
     async saveAllFiles() {
         await vscode.commands.executeCommand("workbench.action.files.saveFiles");
     }
-    async closeTab() {
+    async closeFile() {
         this.getCurrentEditor();
         await vscode.commands.executeCommand("workbench.action.closeActiveEditor");
-    }
-    async createTab() {  //set name????
-        this.getCurrentEditor();
-        await vscode.commands.executeCommand("workbench.action.files.newUntitledFile");
     }
 
     // inserting text
@@ -272,11 +320,6 @@ class Executor {
     async showHoverDebug() { ////???????????????
         this.getCurrentEditor();
         vscode.commands.executeCommand("editor.debug.action.showDebugHover");
-    }
-
-    //Not done
-    addFile() {
-        console.log("addFile")
     }
 
     async addClass(argvs) { // toDo go down and type pass

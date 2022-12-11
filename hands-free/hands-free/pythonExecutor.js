@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const vscode = require('vscode');
 
 class PythonExecutor {
     addComment(argvs){
@@ -26,6 +27,10 @@ class PythonExecutor {
     addParameter(argvs) {
         const parameterName =_.snakeCase(argvs.join(" "));
         return parameterName;
+    }
+    async runActiveFile() {
+        //await vscode.commands.executeCommand("python.execSelectionInTerminal"); //for the selected code --> may add it later
+        await vscode.commands.executeCommand("python.execInTerminal");
     }
 }
 

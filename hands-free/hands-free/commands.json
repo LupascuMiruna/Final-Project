@@ -9,11 +9,10 @@
         "parameter": "addParameterPython"
     },
     "close": {
-        "tab": "closeTab",
-        "window": "closeTab"
+        "file": "closeFile"
     },
     "create":{
-        "tab": "addFile"
+        "file": "createFile"
     },
     "move": {
         "cursor": "moveCursor",
@@ -58,7 +57,9 @@
 
     "open":{
         "tag": "openTag",
-        "terminal": "openTerminal"
+        "terminal": "openTerminal",
+        "folder": "openCurrentFolder",
+        "file": "openFile"
     },
     "clear":{
         "terminal": "clearTerminal"
@@ -66,12 +67,6 @@
     "go":{
         "function": "goToFunction",
         "character": "moveCursorToCharacter",
-        "next": {
-            "tab": "goNextTab"
-        },
-        "previous": {
-            "tab": "goPreviousTab"
-        },
         "definition": "goToDefinition"
     },
     "find":{
@@ -96,12 +91,15 @@
         "hover": "showHoverDebug",
         "preview": "markdownShowPreview"
     },
-
-    "test": {
-        "test": "test"
-    }
-
-
-   
+    "tab": "insertTab",
+    "undo": "undo",
+    "quick": "quickOpen",
+    "type": {
+         "text": "typeTextDocument",
+         "command": "typeCommandTerminal"
+    },
+    "run": "runActiveFile",
     
+    "test": "test"
+
 }
