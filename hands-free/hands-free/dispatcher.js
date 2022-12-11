@@ -1,4 +1,6 @@
 const commands = require('./commands.json');
+const _ = require('lodash');
+
 const isDict = dict => {
     return typeof dict === "object" && !Array.isArray(dict);
   };
@@ -21,11 +23,11 @@ class Dispatcher {
                     index += 1;
                     if(! isDict(commandToLook)) {
                         commandFound = true;
-                        this.executor[commandToLook](words.slice(index));
+                        this.executor[commandToLook](words.slice(index).map(word=>_.toLower(word)));
                     }
                 }
                 else {
-                    console.log("not found")
+                    console.log("Command not found")
                     break;
                 } 
             }
