@@ -64,7 +64,7 @@ function activate(context) {
 		// socket.on('onMessage', function (data) {
 		// 	dispatcher.dispatch(data)
 		// });
-		const data = ["type command git help -a"];
+		const data = ["open file my first file"];
 		dispatcher.dispatch(data);
 		
 	});

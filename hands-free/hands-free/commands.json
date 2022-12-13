@@ -11,9 +11,6 @@
     "close": {
         "file": "closeFile"
     },
-    "create":{
-        "file": "createFile"
-    },
     "move": {
         "cursor": "moveCursor",
         "line": {
@@ -99,6 +96,11 @@
          "command": "typeCommandTerminal"
     },
     "run": "runActiveFile",
+
+    "checkout": "checkoutBranch",
+    "push": "pushCommit",
+    "commit": "commitChanges",
+    "pull": "pullChanges",
     
     "test": "test"
 

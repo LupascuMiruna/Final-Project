@@ -16,30 +16,101 @@ class Executor {
         this.currentLanguage = NaN
     }  
 
-    async test(argvs, context){
-        const extensionPath1 = vscode.window.activeTextEditor.document.uri.fsPath
-        const filename = vscode.window.activeTextEditor.document.fileName;
-        const currentFolder1 = vscode.workspace.workspaceFolders[0].uri.path;
-        const currentFolder2 = vscode.workspace.workspaceFolders[0].uri.fsPath;
+    async test(argvs){
+       const currentFolder = vscode.workspace.workspaceFolders[0].uri;
+       var directoryContent = await vscode.workspace.fs.readDirectory(currentFolder);
+       directoryContent = directoryContent.map(function(x) {return x[0];})
+       directoryContent = directoryContent.map(function(x) {
+                                                const indexOfExtension = x.indexOf('.');
+                                                return [x.slice(0,indexOfExtension), x.slice(indexOfExtension+1)]
+                                            })
+
     }
 
-    createFilePath(argvs){
+    getRepo(){
+        const gitExtension = vscode.extensions.getExtension('vscode.git').exports;
+        const api = gitExtension.getAPI(1);
+        const repo = api.repositories[0];
+        return repo;
+    }
+
+    async checkoutBranch(argvs) {  //!!! it brings the changes on the new branch
+        const branchName = argvs.join(" ");
+        const repo = this.getRepo();
+        await repo.checkout(branchName);
+    }
+
+    async commitChanges(argvs) {
+        const commitMessage = argvs.join(" ");
+        const repo = this.getRepo();
+        await repo.commit(commitMessage, {all: true});
+    }
+
+    async pushCommit() {
+        const repo = this.getRepo();
+        await repo.checkout("main");
+    }
+
+    async pullChanges() {
+        const repo = this.getRepo();
+        await repo.pull();
+    }
+
+    async mergeBase(argvs) {
+        //toDo
+    }
+
+    async GITCANDIIVAVENITIMPUL(argvs){
+        //https://stackoverflow.com/questions/46511595/how-to-access-the-api-for-git-in-visual-studio-code
+        //https://github.com/microsoft/vscode/blob/main/extensions/git/src/api/api1.ts#L160
+
+        const gitExtension = vscode.extensions.getExtension('vscode.git').exports;
+        const api = gitExtension.getAPI(1);
+
+        const repo = api.repositories[0];
+        const head = repo.state.HEAD;
+
+        // Get the branch and commit 
+        const {commit,name: branch} = head;
+
+        // Get head of any other branch
+        const mainBranch = 'main'
+        const branchDetails = await repo.getBranch(mainBranch);
+
+        // Get last merge commit
+        const lastMergeCommit = await repo.getMergeBase(branch, mainBranch);
+
+        const status = await repo.status();
+
+        console.log({ branch, commit, lastMergeCommit, needsSync: lastMergeCommit !== commit });
+    }
+
+    ///////////////////// --------------- older version --------------- /////////////////////
+    // createFilePath(argvs){ //python file file_name
+    //     const currentFolder = vscode.workspace.workspaceFolders[0].uri.path;
+    //     const languageToExtension = {
+    //         "python": "py",
+    //         "txt": "txt",
+    //     }
+    //     var filePath = NaN;
+    //     if (languageToExtension[argvs[0]]) {
+    //         const fileExtension = languageToExtension[argvs[0]]
+    //         const fileName = _.camelCase(argvs.slice(1))
+    //         filePath = currentFolder + '/' + fileName + '.' + fileExtension;
+    //     }
+    //     return filePath;
+    // }
+
+    filePath(fileName, fileExtension) { //"myFirstFile", "py"
         const currentFolder = vscode.workspace.workspaceFolders[0].uri.path;
-        const languageToExtension = {
-            "python": "py",
-            "txt": "txt",
-        }
-        var filePath = NaN;
-        if (languageToExtension[argvs[0]]) {
-            const fileExtension = languageToExtension[argvs[0]]
-            const fileName = _.camelCase(argvs.slice(1))
-            filePath = currentFolder + '/' + fileName + '.' + fileExtension;
-        }
-        return filePath;
+        const filePath = currentFolder + '/' + fileName + '.' + fileExtension;
+        return filePath
+
     }
 
-    async createFile(argvs) { //create file txt first file  / create file python main
-        const filePath = this.createFilePath(argvs);
+    async createFile(name, extension) { //create file txt first file  / create file python main
+        const fileName = _.camelCase(name)
+        const filePath = this.filePath(fileName,extension);
         if (filePath != NaN) {
             await vscode.workspace.fs.writeFile(vscode.Uri.parse(filePath), new TextEncoder().encode(''));
             await vscode.window.showTextDocument(vscode.Uri.file(filePath));
@@ -50,12 +121,26 @@ class Executor {
     }
 
     async openFile(argvs){
-        const filePath = this.createFilePath(argvs)
-        if (filePath != NaN) {
-            await vscode.window.showTextDocument(vscode.Uri.file(filePath));
-        } else {
-            this.showErrorMesage();
+        //directory content [['a', 'txt], ['a', 'json']....]
+
+        const currentFolder = vscode.workspace.workspaceFolders[0].uri;
+        var directoryContent = await vscode.workspace.fs.readDirectory(currentFolder);
+        directoryContent = directoryContent.map(function(x) {return x[0];})
+        directoryContent = directoryContent.map(function(x) {
+                                                 const indexOfExtension = x.indexOf('.');
+                                                 return [x.slice(0,indexOfExtension), x.slice(indexOfExtension+1)]
+                                             })
+
+        const searchedFile = _.camelCase(argvs);
+        for(var file of directoryContent) { //take the first file with this name
+            if(file[0] == searchedFile) {
+                var filePath = this.filePath(searchedFile, file[1]);
+                await vscode.window.showTextDocument(vscode.Uri.file(filePath));
+                return;
+            } 
         }
+
+        this.showErrorMesage();
     }
 
     async quickOpen() {
