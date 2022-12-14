@@ -1,6 +1,14 @@
 {
-    "css": ["css", "scss"],
-    "python": ["py"],
-    "html": ["html", "vue", "svelte"]
-  }
-  
+  "css": [
+    "css",
+    "scss"
+  ],
+  "python": [
+    "py"
+  ],
+  "html": [
+    "html",
+    "vue",
+    "svelte"
+  ]
+}

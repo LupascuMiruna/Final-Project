@@ -1,108 +1,97 @@
-
 {
-    "add": {
-        "file": "addFile",  
-        "comment": "addComment",
-        "attribute": "addAttribute",
-        "class": "addClass",
-        "method": "addMethod",
-        "parameter": "addParameter",
+	"add": {
+		"file": "addFile",
+		"comment": "addComment",
+		"attribute": "addAttribute",
+		"class": "addClass",
+		"method": "addMethod",
+		"parameter": "addParameter",
 		"return": "addReturn"
-    },
-    "close": {
-        "file": "closeFile"
-    },
-    "move": {
-        "cursor": "moveCursor",
-        "line": {
-            "down": "moveLineDown",
-            "up": "moveLineUp"
-        }
-    },
-    "select": {
-        "block": "selectBlock"
-    },
-    "copy": {
-        "text": "copyToClipboard",
-        "line": {
-            "down": "copyLineDown",
-            "up":"copyLineUp"
-        },
-        "path": "copyPath"
-    },
-    "cut": {
-        "text": "cutText"
-    },
-
-    "paste": {
-        "text": "pasteFromClipboard"
-    },
-    "indent": {
-        "line": "indentLine"
-    },
-    "outdent": {
-        "outdent": "outdentLine"
-    },
-    "save": {
-        "file": "saveFile",
-        "all": "saveAllFiles"
-    },
-    "delete": {
-        "line": "deleteLine"
-    },
-
-   
-
-    "open":{
-        "tag": "openTag",
-        "terminal": "openTerminal",
-        "folder": "openCurrentFolder",
-        "file": "openFile"
-    },
-    "clear":{
-        "terminal": "clearTerminal"
-    },
-    "go":{
-        "function": "goToFunction",
-        "character": "moveCursorToCharacter",
-        "definition": "goToDefinition"
-    },
-    "find":{
-        "all": "findSelectAllPython"
-    },
-    
-
-
-    "start":{
-        "debug": "startDebug"
-    },
-    "stop": {
-        "debug": "stopDebug"
-    },
-    "continue":{
-        "debug": "continueDebug"
-    },
-    "toggle":{
-        "breakpoint": "inlineBreakpoint"
-    },
-    "show":{
-        "hover": "showHoverDebug",
-        "preview": "markdownShowPreview"
-    },
-    "tab": "insertTab",
-    "undo": "undo",
-    "quick": "quickOpen",
-    "type": {
-         "text": "typeTextDocument",
-         "command": "typeCommandTerminal"
-    },
-    "run": "runActiveFile",
-
-    "checkout": "checkoutBranch",
-    "push": "pushCommit",
-    "commit": "commitChanges",
-    "pull": "pullChanges",
-    
-    "test": "test"
-
+	},
+	"close": {
+		"file": "closeFile"
+	},
+	"move": {
+		"cursor": "moveCursor",
+		"line": {
+			"down": "moveLineDown",
+			"up": "moveLineUp"
+		}
+	},
+	"select": {
+		"block": "selectBlock"
+	},
+	"copy": {
+		"text": "copyToClipboard",
+		"line": {
+			"down": "copyLineDown",
+			"up": "copyLineUp"
+		},
+		"path": "copyPath"
+	},
+	"cut": {
+		"text": "cutText"
+	},
+	"paste": {
+		"text": "pasteFromClipboard"
+	},
+	"indent": {
+		"line": "indentLine"
+	},
+	"outdent": {
+		"outdent": "outdentLine"
+	},
+	"save": {
+		"file": "saveFile",
+		"all": "saveAllFiles"
+	},
+	"delete": {
+		"line": "deleteLine"
+	},
+	"open": {
+		"tag": "openTag",
+		"terminal": "openTerminal",
+		"folder": "openCurrentFolder",
+		"file": "openFile"
+	},
+	"clear": {
+		"terminal": "clearTerminal"
+	},
+	"go": {
+		"function": "goToFunction",
+		"character": "moveCursorToCharacter",
+		"definition": "goToDefinition"
+	},
+	"find": {
+		"all": "findSelectAllPython"
+	},
+	"start": {
+		"debug": "startDebug"
+	},
+	"stop": {
+		"debug": "stopDebug"
+	},
+	"continue": {
+		"debug": "continueDebug"
+	},
+	"toggle": {
+		"breakpoint": "inlineBreakpoint"
+	},
+	"show": {
+		"hover": "showHoverDebug",
+		"preview": "markdownShowPreview"
+	},
+	"tab": "insertTab",
+	"undo": "undo",
+	"quick": "quickOpen",
+	"type": {
+		"text": "typeTextDocument",
+		"command": "typeCommandTerminal"
+	},
+	"run": "runActiveFile",
+	"checkout": "checkoutBranch",
+	"push": "pushCommit",
+	"commit": "commitChanges",
+	"pull": "pullChanges",
+	"test": "test"
 }

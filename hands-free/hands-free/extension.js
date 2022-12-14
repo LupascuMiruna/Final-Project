@@ -53,11 +53,11 @@ function activate(context) {
 		const fileUri = vscode.Uri.file(filePath);
 
 		// socket.on('onMessage', function (data) {
-			
+
 		// 	console.log(data)
 		// 	vscode.workspace.fs.writeFile(fileUri, Buffer.from(data.text[0] || 'no response'))
 		// });
-		
+
 	});
 
 	let trial_v1 = vscode.commands.registerCommand('hands-free.trial_v1', async function () {
@@ -66,14 +66,14 @@ function activate(context) {
 		// });
 		const data = ["add parameter lala"]
 		dispatcher.dispatch(data);
-		
+
 	});
 
 	context.subscriptions.push(disposable, trial, trial_v1);
 }
 
 // This method is called when your extension is deactivated
-function deactivate() {}
+function deactivate() { }
 
 module.exports = {
 	activate,

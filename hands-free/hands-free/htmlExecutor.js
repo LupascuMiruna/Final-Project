@@ -4,10 +4,10 @@ class HtmlExecutor {
     constructor() {
         this.singleTags = ["area", "source", "br", "link", "input"];
     }
-    addComment(argvs){
+    addComment(argvs) {
         var content = argvs.join(" ")
         var compiled = _.template('<!--{{comment}}-->');
-        const text = compiled({comment: content})
+        const text = compiled({ comment: content })
         return text;
     }
 
@@ -16,7 +16,7 @@ class HtmlExecutor {
         const name = argvs.slice(2).join("-")
 
         var compiled = _.template(' {{attribute}}="{{name}}"');
-        const text = compiled({ attribute: attribute, name: name});
+        const text = compiled({ attribute: attribute, name: name });
         return text;
     }
     openTag(argvs) {
@@ -25,13 +25,13 @@ class HtmlExecutor {
         var isSingleTag = false;
         var compiled = _.template('<{{tag}}></{{tag}}>');
 
-        if(this.singleTags.includes(tag)){
+        if (this.singleTags.includes(tag)) {
             var compiled = _.template('<{{tag}}>');
             isSingleTag = true;
-        } 
+        }
         const text = compiled({ tag: tag });
-        
-        return {text, isSingleTag};
+
+        return { text, isSingleTag };
     }
 }
 

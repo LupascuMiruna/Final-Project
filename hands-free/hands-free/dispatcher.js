@@ -5,7 +5,7 @@ const wordsToNumbers = require('words-to-numbers');
 
 const isDict = dict => {
     return typeof dict === "object" && !Array.isArray(dict);
-  };
+};
 
 class Dispatcher {
     constructor(executor) {
@@ -14,18 +14,18 @@ class Dispatcher {
         this.languages = languages;
     }
 
-    searchLanguage(words){
+    searchLanguage(words) {
         var commandToLook = this.commands;
         var languagesToLook = this.languages;
         var index = 0;
-        if(commandToLook[words[index]]) //command
+        if (commandToLook[words[index]]) //command
         {
             var commandFound = false;
-            while(commandFound == false) {
-                if(commandToLook[words[index]]) {
+            while (commandFound == false) {
+                if (commandToLook[words[index]]) {
                     commandToLook = commandToLook[words[index]];
                     index += 1;
-                    if(! isDict(commandToLook)) {
+                    if (!isDict(commandToLook)) {
                         commandFound = true;
                         this.executor[commandToLook](words.slice(index));
                     }
@@ -33,47 +33,47 @@ class Dispatcher {
                 else {
                     console.log("Command not found")
                     break;
-                } 
-           }
+                }
+            }
         }
-        else if(languagesToLook[words[index]]) //create python file
+        else if (languagesToLook[words[index]]) //create python file
         {
             const languageExtension = languagesToLook[words[index]][0]; /// for moment choose the first choice
             this.executor.createFile(words.slice(2), languageExtension);
         }
-        else{
+        else {
             console.log("Command not found")
         }
     }
 
     dispatch(alternatives) {
-        for(const alternative of alternatives) {
-            const words = alternative.split(' ').map(word=>_.toLower(word));
+        for (const alternative of alternatives) {
+            const words = alternative.split(' ').map(word => _.toLower(word));
             var index = 0;
             var commandFound = false;
             var commandToLook = this.commands
-            if(words[index] == "create") {
+            if (words[index] == "create") {
                 this.searchLanguage(words.slice(1))
             }
             else
-                while(commandFound == false) {
-                    if(commandToLook[words[index]]) {
+                while (commandFound == false) {
+                    if (commandToLook[words[index]]) {
                         commandToLook = commandToLook[words[index]];
                         index += 1;
-                        if(! isDict(commandToLook)) {
+                        if (!isDict(commandToLook)) {
                             commandFound = true;
-                            this.executor[commandToLook](words.slice(index).map(word=>_.toLower(word)));
+                            this.executor[commandToLook](words.slice(index).map(word => _.toLower(word)));
                         }
                     }
                     else {
                         console.log("Command not found")
                         break;
-                    } 
+                    }
                 }
         }
-           
+
     }
 }
-    
+
 
 module.exports = Dispatcher
