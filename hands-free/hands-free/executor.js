@@ -252,8 +252,8 @@ class Executor {
         await terminal.sendText(content);
     }
 
-    showErrorMesage() {
-        vscode.window.showInformationMessage("Incorect format, please review the rules");
+    showErrorMesage(message="Incorect format, please review the rules") {
+        vscode.window.showInformationMessage(message);
     }
     copyToClipboard() {
         vscode.commands.executeCommand("editor.action.clipboardCutAction");
@@ -513,16 +513,47 @@ class Executor {
         //we are already in the function header --> search parameters and insert on the first position
         this.getEditorState();
         if(this.instances[this.currentLanguage]){
-            const parameterName = this.instances[this.currentLanguage].addParameter(argvs);
+            const regexForFunction = this.
+            instances[this.currentLanguage].getRegexForFunction();
+            const currentLine = this.getCursorPosition().line;
 
-            this.moveCursorAfterCharacter();
-            this.insertText(parameterName);
+            const textCurrentLine = vscode.workspace.textDocuments[0].lineAt(currentLine).text;
+            var matches = [...textCurrentLine.matchAll(regexForFunction)];
+            var foundSelections = this.matchRegex(matches);
+            var activeText = vscode.window.activeTextEditor;
+        
+            if(foundSelections[0]) {
+                const regexForParenthesis = /\(.*?\)/g;
+                var matches = [...textCurrentLine.matchAll(regexForParenthesis)];
+                var foundSelections = this.matchRegex(matches);
+                activeText.selection.position = foundSelections[0].position;
+                //this.moveCursor("left");
+            }
+            else {
+                this.showErrorMesage("Error: You should be with the cursor at a function!")
+            }
+            //const parameterName = this.instances[this.currentLanguage].addParameter(argvs);
+
+            //this.moveCursorAfterCharacter();
+            //this.insertText(parameterName);
         }
         else {
             console.log("nop");
         }
-      
     }
+    addReturn(argvs) { //add return function_name of string…./ argument_name
+        this.getEditorState();
+        if(this.instances[this.currentLanguage]){
+            const text = this.instances[this.currentLanguage].addReturn(argvs);
+            //this.moveCursorAfterCharacter();
+            this.insertText(text);
+        }
+        else {
+            console.log("nop");
+        }
+
+    }
+
 
     evaluateExpressionPython(currentExpression) {  // i not equal zero --> i != 0
         var modifiedExpression = "";

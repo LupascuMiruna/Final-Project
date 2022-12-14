@@ -1,6 +1,7 @@
 const commands = require('./commands.json');
 const languages = require('./languages.json');
 const _ = require('lodash');
+const wordsToNumbers = require('words-to-numbers');
 
 const isDict = dict => {
     return typeof dict === "object" && !Array.isArray(dict);

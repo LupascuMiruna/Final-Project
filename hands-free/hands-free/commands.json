@@ -6,7 +6,8 @@
         "attribute": "addAttribute",
         "class": "addClass",
         "method": "addMethod",
-        "parameter": "addParameterPython"
+        "parameter": "addParameter",
+		"return": "addReturn"
     },
     "close": {
         "file": "closeFile"

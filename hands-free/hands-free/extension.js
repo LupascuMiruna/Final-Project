@@ -64,7 +64,7 @@ function activate(context) {
 		// socket.on('onMessage', function (data) {
 		// 	dispatcher.dispatch(data)
 		// });
-		const data = ["open file my first file"];
+		const data = ["add parameter lala"]
 		dispatcher.dispatch(data);
 		
 	});
