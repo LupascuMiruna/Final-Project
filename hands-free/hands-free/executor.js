@@ -435,13 +435,16 @@ class Executor {
         }
 
     }
-    matchRegex(matches) {
+    matchRegex(matches, endEqualsStart=false) { // 2nd parameter for the moment we don't want to select the text
         var foundSelections = [];
         var activeText = vscode.window.activeTextEditor;
 
         matches.forEach((match, index) => {
             var startPosition = activeText.document.positionAt(match.index);
             var endPosition = activeText.document.positionAt(match.index + match[0].length);
+            if(endEqualsStart) {
+                endPosition = startPosition;
+            }
             foundSelections[index] = new vscode.Selection(startPosition, endPosition);
         });
         return foundSelections;
@@ -507,11 +510,52 @@ class Executor {
             var newSelection = new vscode.Selection(startPosition, startPosition);
             activeText.selection = newSelection;
         });
-
     }
 
-    addParameter(argvs) {//////////////////////??????????????????????????
-        //we are already in the function header --> search parameters and insert on the first position
+    //at the moment before )
+    moveCursorBeforeCharacter() { 
+        const editor = vscode.workspace.textDocuments[0];
+        const allText = editor.getText();
+        const regexp = /.(?=\))/g; //for (
+        var matches = [...allText.matchAll(regexp)];
+
+        var activeText = vscode.window.activeTextEditor;
+
+        matches.forEach((match, index) => {
+            var startPosition = activeText.document.positionAt(match.index + 1);
+            var newSelection = new vscode.Selection(startPosition, startPosition);
+            activeText.selection = newSelection;
+        });
+    }
+    evaluateTypeParameter(argvs) { //evaluates the paramater parameterValue [string, boolean, number]
+        const lastArgument = argvs.at(-1);
+        const parameterTypes = ["boolean", "number", "string"]
+        let variableName = null
+        if (parameterTypes.includes(lastArgument)) {
+            if (lastArgument === "string") {
+                argvs.pop();
+                variableName = argvs.join(" ");
+                variableName = '"' + variableName + '"';
+            } else if (lastArgument == "boolean") {
+                variableName = _.capitalize(argvs[0]);
+            } else {
+                variableName = argvs[0];
+            }
+        } else {
+            variableName = _.snakeCase(argvs.join(" "));
+        }
+        return variableName
+    }
+
+    evaluateArguments(argvs, indexSeparator) { // separates de name of the parameter from the implicit value
+        const parameterName = _.snakeCase(argvs.slice(0,indexSeparator).join(" "));
+        let parameterValue = this.evaluateTypeParameter(argvs.slice(indexSeparator+1));
+        var compiled = _.template('{{parameterName}}={{parameterValue}}');
+        const text = compiled({ parameterName: parameterName, parameterValue: parameterValue });
+        return text;  
+    }
+
+    addParameter(argvs) { //we are already in the function header --> search parameters and insert on the last position
         this.getEditorState();
         if (this.instances[this.currentLanguage]) {
             const regexForFunction = this.
@@ -524,13 +568,28 @@ class Executor {
             var activeText = vscode.window.activeTextEditor;
 
             if (foundSelections[0]) {
-                const regexForParenthesis = /\(.*?\)/g;
-                var matches = [...textCurrentLine.matchAll(regexForParenthesis)];
+                this.moveCursorBeforeCharacter();  
+                let parameterExists = false;
+
+                const regexForExistingParameter = /\(.+?\)/g;
+                var matches = [...textCurrentLine.matchAll(regexForExistingParameter)];
                 var foundSelections = this.matchRegex(matches);
-                activeText.selection.position = foundSelections[0].position;
-                this.moveCursor("left");
-            }
-            else {
+                if(foundSelections[0]){
+                    parameterExists = true;
+                }
+
+                const indexSeparator = argvs.indexOf("equals");
+                let parameterName = _.snakeCase(argvs.join(" "));
+                let text = parameterName;
+
+                if (indexSeparator != -1) {
+                    text = this.evaluateArguments(argvs, indexSeparator)
+                }
+                if(parameterExists) {
+                    text = ", " + text;
+                }
+                this.insertText(text)      
+            } else {
                 this.showErrorMesage("Error: You should be with the cursor at a function!")
             }
             //const parameterName = this.instances[this.currentLanguage].addParameter(argvs);
@@ -545,7 +604,8 @@ class Executor {
     addReturn(argvs) { //add return function_name of string…./ argument_name
         this.getEditorState();
         if (this.instances[this.currentLanguage]) {
-            const text = this.instances[this.currentLanguage].addReturn(argvs);
+            const parameterValue = this.evaluateTypeParameter(argvs);
+            const text = this.instances[this.currentLanguage].addReturn(parameterValue);
             //this.moveCursorAfterCharacter();
             this.insertText(text);
         }
