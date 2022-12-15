@@ -3,8 +3,8 @@ const vscode = require('vscode');
 
 class PythonExecutor {
     addComment(argvs) {
-        var content = argvs.join(" ");
-        var compiled = _.template('# {{comment}}');
+        let content = argvs.join(" ");
+        let compiled = _.template('# {{comment}}');
         const text = compiled({ comment: content });
         return text;
     }
@@ -14,13 +14,13 @@ class PythonExecutor {
     }
     addClass(argvs) {
         const className = _.capitalize(_.camelCase(argvs.join(" ")));
-        var compiled = _.template('class {{className}}:');
+        let compiled = _.template('class {{className}}:');
         const text = compiled({ className: className });
         return text;
     }
     addMethod(argvs) {
         const methodName = _.camelCase(argvs.join(" "));
-        var compiled = _.template('def {{methodName}}(self):');
+        let compiled = _.template('def {{methodName}}(self):');
         const text = compiled({ methodName: methodName });
         return text;
     }

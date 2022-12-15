@@ -18,7 +18,7 @@ class Executor {
 
     async test(argvs) {
         const currentFolder = vscode.workspace.workspaceFolders[0].uri;
-        var directoryContent = await vscode.workspace.fs.readDirectory(currentFolder);
+        let directoryContent = await vscode.workspace.fs.readDirectory(currentFolder);
         directoryContent = directoryContent.map(function (x) { return x[0]; })
         directoryContent = directoryContent.map(function (x) {
             const indexOfExtension = x.indexOf('.');
@@ -92,7 +92,7 @@ class Executor {
     //         "python": "py",
     //         "txt": "txt",
     //     }
-    //     var filePath = NaN;
+    //     let filePath = NaN;
     //     if (languageToExtension[argvs[0]]) {
     //         const fileExtension = languageToExtension[argvs[0]]
     //         const fileName = _.camelCase(argvs.slice(1))
@@ -124,7 +124,7 @@ class Executor {
         //directory content [['a', 'txt], ['a', 'json']....]
 
         const currentFolder = vscode.workspace.workspaceFolders[0].uri;
-        var directoryContent = await vscode.workspace.fs.readDirectory(currentFolder);
+        let directoryContent = await vscode.workspace.fs.readDirectory(currentFolder);
         directoryContent = directoryContent.map(function (x) { return x[0]; })
         directoryContent = directoryContent.map(function (x) {
             const indexOfExtension = x.indexOf('.');
@@ -132,9 +132,9 @@ class Executor {
         })
 
         const searchedFile = _.camelCase(argvs);
-        for (var file of directoryContent) { //take the first file with this name
+        for (let file of directoryContent) { //take the first file with this name
             if (file[0] == searchedFile) {
-                var filePath = this.filePath(searchedFile, file[1]);
+                let filePath = this.filePath(searchedFile, file[1]);
                 await vscode.window.showTextDocument(vscode.Uri.file(filePath));
                 return;
             }
@@ -224,15 +224,15 @@ class Executor {
     }
 
     insertText(text) {
-        var activeEditor = vscode.window.activeTextEditor;
-        var cursorPosition = this.getCursorPosition()
+        let activeEditor = vscode.window.activeTextEditor;
+        let cursorPosition = this.getCursorPosition()
         activeEditor.edit(editBuilder => {
             editBuilder.insert(cursorPosition, text)
         });
     }
 
     typeTextDocument(argvs) {
-        var content = argvs.join(" ");
+        let content = argvs.join(" ");
         this.insertText(content);
     }
 
@@ -272,8 +272,8 @@ class Executor {
         const editor = vscode.window.activeTextEditor;
         const cursorPosition = this.getCursorPosition();
 
-        var nextLine = cursorPosition.line;
-        var nextColumn = cursorPosition.character;
+        let nextLine = cursorPosition.line;
+        let nextColumn = cursorPosition.character;
 
         if (argvs[0] === "line") {
             if (isNaN(parseInt(argvs[1]))) {
@@ -297,8 +297,8 @@ class Executor {
             return;
         }
 
-        var newPosition = new vscode.Position(nextLine, nextColumn);
-        var newSelection = new vscode.Selection(newPosition, newPosition);
+        let newPosition = new vscode.Position(nextLine, nextColumn);
+        let newSelection = new vscode.Selection(newPosition, newPosition);
         editor.selection = newSelection;
     }
 
@@ -313,7 +313,7 @@ class Executor {
         }
         const startPosition = new vscode.Position(startLine - 1, 0);
         const stopPosition = new vscode.Position(stopLine, 0);
-        var newSelection = new vscode.Selection(startPosition, stopPosition);
+        let newSelection = new vscode.Selection(startPosition, stopPosition);
         editor.selection = newSelection;
     }
 
@@ -340,14 +340,14 @@ class Executor {
 
     // inserting text
     async pasteFromClipboard() {
-        var pastedContent = await vscode.env.clipboard.readText();
+        let pastedContent = await vscode.env.clipboard.readText();
         this.insertText(pastedContent);
     }
 
     // async addCommentHTML(argvs) { // add comment this is a comment 
-    //     var cursorPosition = this.getCursorPosition();
-    //     var content = argvs.join(" ")
-    //     var compiled = _.template('<!--{{comment}}-->');
+    //     let cursorPosition = this.getCursorPosition();
+    //     let content = argvs.join(" ")
+    //     let compiled = _.template('<!--{{comment}}-->');
     //     const text = compiled({comment: content})
     //     this.insertText(cursorPosition, text)
     // }
@@ -377,8 +377,8 @@ class Executor {
             let lengthText = text.length;
             lengthText = (parseInt(lengthText / 2))
 
-            var p = new vscode.Position(0, lengthText);
-            var s = new vscode.Selection(p, p);
+            let p = new vscode.Position(0, lengthText);
+            let s = new vscode.Selection(p, p);
             vscode.window.activeTextEditor.selection = s;
         }
         else {
@@ -436,12 +436,12 @@ class Executor {
 
     }
     matchRegex(matches, endEqualsStart=false) { // 2nd parameter for the moment we don't want to select the text
-        var foundSelections = [];
-        var activeText = vscode.window.activeTextEditor;
+        let foundSelections = [];
+        let activeText = vscode.window.activeTextEditor;
 
         matches.forEach((match, index) => {
-            var startPosition = activeText.document.positionAt(match.index);
-            var endPosition = activeText.document.positionAt(match.index + match[0].length);
+            let startPosition = activeText.document.positionAt(match.index);
+            let endPosition = activeText.document.positionAt(match.index + match[0].length);
             if(endEqualsStart) {
                 endPosition = startPosition;
             }
@@ -456,7 +456,7 @@ class Executor {
     async findSelectAllPython(argvs) { //if function --> camel case, if parameter --> snake case
         const editor = vscode.workspace.textDocuments[0];///de 0???????????????????????????????????????
         const allText = editor.getText();
-        var objectToFind = argvs.slice(1).join(" ");
+        let objectToFind = argvs.slice(1).join(" ");
 
         if (argvs[0] === "functions") {
             objectToFind = _.camelCase(objectToFind);
@@ -468,9 +468,9 @@ class Executor {
             this.showErrorMesage();
         }
 
-        var matches = [...allText.matchAll(new RegExp(`${objectToFind}`, "gm"))];
-        var foundSelections = this.matchRegex(matches)
-        var activeText = vscode.window.activeTextEditor;
+        let matches = [...allText.matchAll(new RegExp(`${objectToFind}`, "gm"))];
+        let foundSelections = this.matchRegex(matches)
+        let activeText = vscode.window.activeTextEditor;
         activeText.selection = foundSelections[0];
     }
 
@@ -481,13 +481,13 @@ class Executor {
             const functionName = this.instances[this.currentLanguage].goToFunction(argvs)
             const editor = vscode.workspace.textDocuments[0];
             const allText = editor.getText();
-            var matches = [...allText.matchAll(new RegExp(`${functionName}`, "gm"))];
+            let matches = [...allText.matchAll(new RegExp(`${functionName}`, "gm"))];
 
-            var activeText = vscode.window.activeTextEditor;
+            let activeText = vscode.window.activeTextEditor;
 
             matches.forEach((match, index) => {
-                var startPosition = activeText.document.positionAt(match.index);
-                var newSelection = new vscode.Selection(startPosition, startPosition);
+                let startPosition = activeText.document.positionAt(match.index);
+                let newSelection = new vscode.Selection(startPosition, startPosition);
                 activeText.selection = newSelection;
             });
         }
@@ -501,13 +501,13 @@ class Executor {
         const editor = vscode.workspace.textDocuments[0];
         const allText = editor.getText();
         const regexp = /(?<=\()/g; //for (
-        var matches = [...allText.matchAll(regexp)];
+        let matches = [...allText.matchAll(regexp)];
 
-        var activeText = vscode.window.activeTextEditor;
+        let activeText = vscode.window.activeTextEditor;
 
         matches.forEach((match, index) => {
-            var startPosition = activeText.document.positionAt(match.index);
-            var newSelection = new vscode.Selection(startPosition, startPosition);
+            let startPosition = activeText.document.positionAt(match.index);
+            let newSelection = new vscode.Selection(startPosition, startPosition);
             activeText.selection = newSelection;
         });
     }
@@ -517,13 +517,13 @@ class Executor {
         const editor = vscode.workspace.textDocuments[0];
         const allText = editor.getText();
         const regexp = /.(?=\))/g; //for (
-        var matches = [...allText.matchAll(regexp)];
+        let matches = [...allText.matchAll(regexp)];
 
-        var activeText = vscode.window.activeTextEditor;
+        let activeText = vscode.window.activeTextEditor;
 
         matches.forEach((match, index) => {
-            var startPosition = activeText.document.positionAt(match.index + 1);
-            var newSelection = new vscode.Selection(startPosition, startPosition);
+            let startPosition = activeText.document.positionAt(match.index + 1);
+            let newSelection = new vscode.Selection(startPosition, startPosition);
             activeText.selection = newSelection;
         });
     }
@@ -550,7 +550,7 @@ class Executor {
     evaluateArguments(argvs, indexSeparator) { // separates de name of the parameter from the implicit value
         const parameterName = _.snakeCase(argvs.slice(0,indexSeparator).join(" "));
         let parameterValue = this.evaluateTypeParameter(argvs.slice(indexSeparator+1));
-        var compiled = _.template('{{parameterName}}={{parameterValue}}');
+        let compiled = _.template('{{parameterName}}={{parameterValue}}');
         const text = compiled({ parameterName: parameterName, parameterValue: parameterValue });
         return text;  
     }
@@ -563,17 +563,17 @@ class Executor {
             const currentLine = this.getCursorPosition().line;
 
             const textCurrentLine = vscode.workspace.textDocuments[0].lineAt(currentLine).text;
-            var matches = [...textCurrentLine.matchAll(regexForFunction)];
-            var foundSelections = this.matchRegex(matches);
-            var activeText = vscode.window.activeTextEditor;
+            let matches = [...textCurrentLine.matchAll(regexForFunction)];
+            let foundSelections = this.matchRegex(matches);
+            let activeText = vscode.window.activeTextEditor;
 
             if (foundSelections[0]) {
                 this.moveCursorBeforeCharacter();  
                 let parameterExists = false;
 
                 const regexForExistingParameter = /\(.+?\)/g;
-                var matches = [...textCurrentLine.matchAll(regexForExistingParameter)];
-                var foundSelections = this.matchRegex(matches);
+                let matches = [...textCurrentLine.matchAll(regexForExistingParameter)];
+                let foundSelections = this.matchRegex(matches);
                 if(foundSelections[0]){
                     parameterExists = true;
                 }
@@ -617,9 +617,9 @@ class Executor {
 
 
     evaluateExpressionPython(currentExpression) {  // i not equal zero --> i != 0
-        var modifiedExpression = "";
+        let modifiedExpression = "";
         for (index in currentExpression) {
-            var word = currentExpression[index]
+            let word = currentExpression[index]
             if (this.expressions[word]) {
                 modifiedExpression = modifiedExpression.concat(this.expressions[word]);
             }
