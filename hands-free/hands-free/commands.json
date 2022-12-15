@@ -6,7 +6,11 @@
 		"class": "addClass",
 		"method": "addMethod",
 		"parameter": "addParameter",
-		"return": "addReturn"
+		"return": "addReturn",
+		"for": "addFor",
+		"if": "addVerificationCommand",
+		"while": "addVerificationCommand",
+		"else": "addVerificationCommand"
 	},
 	"close": {
 		"file": "closeFile"

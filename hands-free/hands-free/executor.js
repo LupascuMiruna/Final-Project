@@ -5,9 +5,7 @@ const PythonExecutor = require('./pythonExecutor');
 _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
 class Executor {
-
     constructor() {
-
         this.expressions = { "equal": "=", "equals": "=", "not": "!", "lees": "<", "greater": ">" }; //less or equal
         this.instances = {
             html: new HtmlExecutor(),
@@ -17,14 +15,34 @@ class Executor {
     }
 
     async test(argvs) {
-        const currentFolder = vscode.workspace.workspaceFolders[0].uri;
-        let directoryContent = await vscode.workspace.fs.readDirectory(currentFolder);
-        directoryContent = directoryContent.map(function (x) { return x[0]; })
-        directoryContent = directoryContent.map(function (x) {
-            const indexOfExtension = x.indexOf('.');
-            return [x.slice(0, indexOfExtension), x.slice(indexOfExtension + 1)]
-        })
+        // const currentFolder = vscode.workspace.workspaceFolders[0].uri;
+        // let directoryContent = await vscode.workspace.fs.readDirectory(currentFolder);
+        // directoryContent = directoryContent.map(function (x) { return x[0]; })
+        // directoryContent = directoryContent.map(function (x) {
+        //     const indexOfExtension = x.indexOf('.');
+        //     return [x.slice(0, indexOfExtension), x.slice(indexOfExtension + 1)]
+        // })
 
+        // let modifiedExpression = "";
+        // for (let word of argvs) {
+        //     if (this.expressions[word]) {
+        //         modifiedExpression = modifiedExpression.concat(this.expressions[word]);
+        //     }
+        //     else {
+        //         modifiedExpression = modifiedExpression.concat(word)
+        //     }
+        // }
+        // this.insertText(modifiedExpression);
+        // return modifiedExpression;
+        await vscode.commands.executeCommand("cursorDown");
+
+    }
+
+    getCurrentExecutor() {
+        this.getEditorState();
+        const currentExecutor = this.instances[this.currentLanguage];
+
+        return currentExecutor;
     }
 
     getRepo() {
@@ -202,9 +220,9 @@ class Executor {
     }
 
     async addComment(argvs) {
-        this.getEditorState();
-        if (this.instances[this.currentLanguage]) {
-            const text = this.instances[this.currentLanguage].addComment(argvs)
+        const currentExecutor = this.getCurrentExecutor();
+        if (currentExecutor) {
+            const text = currentExecutor.addComment(argvs)
             this.insertText(text)
         }
         else {
@@ -237,9 +255,9 @@ class Executor {
     }
 
     async runActiveFile() {
-        this.getEditorState();
-        if (this.instances[this.currentLanguage]) {
-            this.instances[this.currentLanguage].runActiveFile();
+        const currentExecutor = this.getCurrentExecutor();
+        if (currentExecutor) {
+            currentExecutor.runActiveFile();
 
         }
         else {
@@ -353,9 +371,9 @@ class Executor {
     // }
 
     async addAttribute(argvs) { //add attribute id equals login  !!!!trebuie sa vad unde il adaug pe linia curenta
-        this.getEditorState();
-        if (this.instances[this.currentLanguage]) {
-            const text = this.instances[this.currentLanguage].addAttribute(argvs)
+        const currentExecutor = this.getCurrentExecutor();
+        if (currentExecutor) {
+            const text = currentExecutor.addAttribute(argvs)
             this.insertText(text);
         }
         else {
@@ -365,9 +383,9 @@ class Executor {
     }
 
     async openTag(argvs) { //open tag div
-        this.getEditorState();
-        if (this.instances[this.currentLanguage]) {
-            const { text, isSingleTag } = this.instances[this.currentLanguage].openTag(argvs)
+        const currentExecutor = this.getCurrentExecutor();
+        if (currentExecutor) {
+            const { text, isSingleTag } = currentExecutor.openTag(argvs)
             this.insertText(text);
 
             if (isSingleTag) {
@@ -409,10 +427,9 @@ class Executor {
     }
 
     async addClass(argvs) { // toDo go down and type pass
-        this.getEditorState();
-        if (this.instances[this.currentLanguage]) {
-
-            const text = this.instances[this.currentLanguage].addClass(argvs);
+        const currentExecutor = this.getCurrentExecutor();
+        if (currentExecutor) {
+            const text = currentExecutor.addClass(argvs);
             this.insertText(text);
             this.moveCursor(["down"]);
             this.insertText("pass");
@@ -423,9 +440,9 @@ class Executor {
     }
 
     async addMethod(argvs) {
-        this.getEditorState();
-        if (this.instances[this.currentLanguage]) {
-            const text = this.instances[this.currentLanguage].addMethod(argvs);
+        const currentExecutor = this.getCurrentExecutor();
+        if (currentExecutor) {
+            const text = currentExecutor.addMethod(argvs);
             this.insertText(text);
             this.moveCursor(["down"]);
             this.insertText("pass");
@@ -476,9 +493,9 @@ class Executor {
 
     // toDo: find regex for function name
     goToFunction(argvs) {
-        this.getEditorState();
-        if (this.instances[this.currentLanguage]) {
-            const functionName = this.instances[this.currentLanguage].goToFunction(argvs)
+        const currentExecutor = this.getCurrentExecutor();
+        if (currentExecutor) {
+            const functionName = currentExecutor.goToFunction(argvs)
             const editor = vscode.workspace.textDocuments[0];
             const allText = editor.getText();
             let matches = [...allText.matchAll(new RegExp(`${functionName}`, "gm"))];
@@ -556,10 +573,9 @@ class Executor {
     }
 
     addParameter(argvs) { //we are already in the function header --> search parameters and insert on the last position
-        this.getEditorState();
-        if (this.instances[this.currentLanguage]) {
-            const regexForFunction = this.
-                instances[this.currentLanguage].getRegexForFunction();
+        const currentExecutor = this.getCurrentExecutor();
+        if (currentExecutor) {
+            const regexForFunction = currentExecutor.getRegexForFunction();
             const currentLine = this.getCursorPosition().line;
 
             const textCurrentLine = vscode.workspace.textDocuments[0].lineAt(currentLine).text;
@@ -601,33 +617,41 @@ class Executor {
             console.log("nop");
         }
     }
+
     addReturn(argvs) { //add return function_name of string…./ argument_name
-        this.getEditorState();
-        if (this.instances[this.currentLanguage]) {
+        const currentExecutor = this.getCurrentExecutor();
+        if (currentExecutor) {
             const parameterValue = this.evaluateTypeParameter(argvs);
-            const text = this.instances[this.currentLanguage].addReturn(parameterValue);
+            const text = currentExecutor.addReturn(parameterValue);
             //this.moveCursorAfterCharacter();
             this.insertText(text);
         }
         else {
             console.log("nop");
         }
-
     }
 
+    async addVerificationCommand(argvs){
+        const currentExecutor = this.getCurrentExecutor();
+        if (currentExecutor) { 
+            const text = currentExecutor.addVerificationCommand(argvs);
+            this.insertText(text);
+            await vscode.commands.executeCommand("cursorDown");
+            // this.moveCursor("down");  // DOESN'T WORK
+        } else {
+            console.log("nop");
+        }   
+    }
 
-    evaluateExpressionPython(currentExpression) {  // i not equal zero --> i != 0
-        let modifiedExpression = "";
-        for (index in currentExpression) {
-            let word = currentExpression[index]
-            if (this.expressions[word]) {
-                modifiedExpression = modifiedExpression.concat(this.expressions[word]);
-            }
-            else {
-                modifiedExpression = modifiedExpression.concat(word)
-            }
+    async addFor(argvs){
+        const currentExecutor = this.getCurrentExecutor();
+        if (currentExecutor) {
+            const text = currentExecutor.addFor(argvs);
+                this.insertText(text);
+                await vscode.commands.executeCommand("cursorDown");
+        } else {
+            console.log("nop");
         }
-        return modifiedExpression;
     }
 }
 

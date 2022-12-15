@@ -62,6 +62,9 @@ class Dispatcher {
                         index += 1;
                         if (!isDict(commandToLook)) {
                             commandFound = true;
+                            if(commandToLook == "addVerificationCommand") { //in case of if/else/while we have to include this word also
+                                index -= 1;
+                            }
                             this.executor[commandToLook](words.slice(index).map(word => _.toLower(word)));
                         }
                     }

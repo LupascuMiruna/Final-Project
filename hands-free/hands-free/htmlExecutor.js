@@ -4,6 +4,7 @@ class HtmlExecutor {
     constructor() {
         this.singleTags = ["area", "source", "br", "link", "input"];
     }
+    
     addComment(argvs) {
         let content = argvs.join(" ")
         let compiled = _.template('<!--{{comment}}-->');
@@ -19,6 +20,7 @@ class HtmlExecutor {
         const text = compiled({ attribute: attribute, name: name });
         return text;
     }
+
     openTag(argvs) {
         let tag = argvs[0];
         let isSingleTag = false;

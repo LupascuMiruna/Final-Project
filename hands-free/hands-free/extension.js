@@ -64,7 +64,7 @@ function activate(context) {
 		// socket.on('onMessage', function (data) {
 		// 	dispatcher.dispatch(data)
 		// });
-		const data = ["open tag div"]
+		const data = ["add comment new comment"]
 		dispatcher.dispatch(data);
 
 	});
