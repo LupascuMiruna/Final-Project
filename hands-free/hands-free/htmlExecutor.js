@@ -21,12 +21,11 @@ class HtmlExecutor {
     }
     openTag(argvs) {
         let tag = argvs[0];
-        let compiled = NaN;
         let isSingleTag = false;
         let compiled = _.template('<{{tag}}></{{tag}}>');
 
         if (this.singleTags.includes(tag)) {
-            let compiled = _.template('<{{tag}}>');
+            compiled = _.template('<{{tag}}>');
             isSingleTag = true;
         }
         const text = compiled({ tag: tag });

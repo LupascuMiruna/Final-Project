@@ -64,7 +64,7 @@ function activate(context) {
 		// socket.on('onMessage', function (data) {
 		// 	dispatcher.dispatch(data)
 		// });
-		const data = ["add parameter lala bala"]
+		const data = ["open tag div"]
 		dispatcher.dispatch(data);
 
 	});
