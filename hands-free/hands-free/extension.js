@@ -1,20 +1,10 @@
 const vscode = require('vscode');
 const io = require('socket.io-client');
 
-const Dispatcher = require('./dispatcher');
-const Executor = require('./executor');
+const dispatcher = require('./dispatcher')
 const Client = require('./client');
-
-
-
-
-const executor = new Executor();
-const dispatcher = new Dispatcher(executor);
 // const client = new Client(dispatcher);
 
-
-
-////////////
 // const socket = io.connect('http://localhost:3000', {reconnect: true});
 
 // // Add a connect listener
@@ -64,7 +54,7 @@ function activate(context) {
 		// socket.on('onMessage', function (data) {
 		// 	dispatcher.dispatch(data)
 		// });
-		const data = ["add comment new comment"]
+		const data = ["add comment my comment"]
 		dispatcher.dispatch(data);
 
 	});

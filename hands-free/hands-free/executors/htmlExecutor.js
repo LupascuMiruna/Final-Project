@@ -1,7 +1,10 @@
 const _ = require('lodash');
 
-class HtmlExecutor {
+const LanguageExecutor = require('./languageExecutor');
+
+class HtmlExecutor extends LanguageExecutor {
     constructor() {
+        super();
         this.singleTags = ["area", "source", "br", "link", "input"];
     }
     
@@ -9,7 +12,8 @@ class HtmlExecutor {
         let content = argvs.join(" ")
         let compiled = _.template('<!--{{comment}}-->');
         const text = compiled({ comment: content })
-        return text;
+        
+        this.insertText(text)
     }
 
     addAttribute(argvs) {

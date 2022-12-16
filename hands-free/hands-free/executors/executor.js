@@ -2,16 +2,13 @@ const vscode = require('vscode');
 const _ = require('lodash');
 const HtmlExecutor = require('./htmlExecutor');
 const PythonExecutor = require('./pythonExecutor');
+
 _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
 class Executor {
-    constructor() {
+    constructor(instances) {
         this.expressions = { "equal": "=", "equals": "=", "not": "!", "lees": "<", "greater": ">" }; //less or equal
-        this.instances = {
-            html: new HtmlExecutor(),
-            python: new PythonExecutor()
-        }
-        this.currentLanguage = NaN
+        this.instances = instances
     }
 
     async test(argvs) {
@@ -39,10 +36,8 @@ class Executor {
     }
 
     getCurrentExecutor() {
-        this.getEditorState();
-        const currentExecutor = this.instances[this.currentLanguage];
-
-        return currentExecutor;
+        const currentLanguage = this.getCurrentLanguage();
+        return this.instances[currentLanguage];
     }
 
     getRepo() {
@@ -123,7 +118,6 @@ class Executor {
         const currentFolder = vscode.workspace.workspaceFolders[0].uri.path;
         const filePath = currentFolder + '/' + fileName + '.' + fileExtension;
         return filePath
-
     }
 
     async createFile(name, extension) { //create file txt first file  / create file python main
@@ -168,8 +162,14 @@ class Executor {
         // enter command
     }
 
+    async _executeCommand(action) {
+        return vscode.commands.executeCommand(`workbench.action.${action}`);
+    }
+
+    // TODO: Replace peste tot cu _executeCommand
     async openCurrentFolder() {
-        await vscode.commands.executeCommand("workbench.action.files.openFolderInNewWindow");
+        // await vscode.commands.executeCommand("workbench.action.files.openFolderInNewWindow");
+        await this._executeCommand("workbench.action.files.openFolderInNewWindow");
     }
 
     async insertTab() {
@@ -197,26 +197,29 @@ class Executor {
     markdownShowPreview() {
         vscode.commands.executeCommand("markdown.showPreview");
     }
+
     indentLine() {
         vscode.commands.executeCommand("editor.action.indentLines");
     }
+
     outdentLine() {
         vscode.commands.executeCommand("editor.action.outdentLines");
     }
+
     moveLineDown() {
         vscode.commands.executeCommand("editor.action.moveLinesDownAction");
     }
+
     moveLineUp() {
         vscode.commands.executeCommand("editor.action.moveLinesUpAction");
     }
+
     deleteLine() {
         vscode.commands.executeCommand("editor.action.deleteLines");
     }
 
-    //auxiliar methods
-    async getEditorState() {
-        const language = vscode.window.activeTextEditor.document.languageId;
-        this.currentLanguage = language;
+    getCurrentLanguage() {
+        return vscode.window.activeTextEditor.document.languageId;
     }
 
     async addComment(argvs) {
@@ -544,6 +547,7 @@ class Executor {
             activeText.selection = newSelection;
         });
     }
+
     evaluateTypeParameter(argvs) { //evaluates the paramater parameterValue [string, boolean, number]
         const lastArgument = argvs.at(-1);
         const parameterTypes = ["boolean", "number", "string"]
@@ -563,6 +567,32 @@ class Executor {
         }
         return variableName
     }
+
+    // TODO: Use this function
+    
+    // evaluateTypeParameter(argvs = []) {
+    //     const evaluateMap = {
+    //         number: (params) => {
+    //             return params;
+    //         },
+    //         string: (params) => {
+    //             return `"${params.join(' ')}"`;
+    //         },
+    //     };
+    //     const booleanValues = ['true', 'false'];
+    //     const lastArgument = argvs.at(-1);
+
+    //     if (booleanValues.includes(lastArgument)) {
+    //         return _.capitalize(lastArgument);
+    //     }
+
+    //     if (!evaluateMap[lastArgument]) {
+    //         return _.snakeCase(argvs.join(' '));
+    //     }
+
+    //     argvs.pop();
+    //     return evaluateMap[lastArgument](argvs);
+    // }
 
     evaluateArguments(argvs, indexSeparator) { // separates de name of the parameter from the implicit value
         const parameterName = _.snakeCase(argvs.slice(0,indexSeparator).join(" "));
@@ -618,7 +648,7 @@ class Executor {
         }
     }
 
-    addReturn(argvs) { //add return function_name of string…./ argument_name
+    addReturn(argvs) { //add 
         const currentExecutor = this.getCurrentExecutor();
         if (currentExecutor) {
             const parameterValue = this.evaluateTypeParameter(argvs);
@@ -655,4 +685,7 @@ class Executor {
     }
 }
 
-module.exports = Executor
+module.exports = new Executor({
+    html: new HtmlExecutor(),
+    python: new PythonExecutor(),
+})

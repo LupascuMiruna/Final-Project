@@ -1,9 +1,11 @@
 const _ = require('lodash');
-const { argv } = require('process');
 const vscode = require('vscode');
 
-class PythonExecutor {
+const LanguageExecutor = require('./languageExecutor');
+
+class PythonExecutor extends LanguageExecutor {
     constructor() {
+        super();
         this.expressions = { "equal": "=", "equals": "=", "not": "!", "lees": "<", "greater": ">" };
     }
 
