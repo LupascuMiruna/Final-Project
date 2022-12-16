@@ -12,6 +12,9 @@
 		"while": "addVerificationCommand",
 		"else": "addVerificationCommand"
 	},
+	"create": {
+
+	},
 	"close": {
 		"file": "closeFile"
 	},
@@ -67,7 +70,7 @@
 		"definition": "goToDefinition"
 	},
 	"find": {
-		"all": "findSelectAllPython"
+		"all": "findSelectAll"
 	},
 	"start": {
 		"debug": "startDebug"

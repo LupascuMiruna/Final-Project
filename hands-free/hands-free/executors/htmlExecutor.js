@@ -1,15 +1,16 @@
 const _ = require('lodash');
+const vscode = require('vscode');
 
 const LanguageExecutor = require('./languageExecutor');
 
 class HtmlExecutor extends LanguageExecutor {
     constructor() {
         super();
-        this.singleTags = ["area", "source", "br", "link", "input"];
+        this.singleTags = ['area', 'source', 'br', 'link', 'input'];
     }
     
     addComment(argvs) {
-        let content = argvs.join(" ")
+        let content = argvs.join(' ')
         let compiled = _.template('<!--{{comment}}-->');
         const text = compiled({ comment: content })
         
@@ -18,11 +19,11 @@ class HtmlExecutor extends LanguageExecutor {
 
     addAttribute(argvs) {
         const attribute = argvs[0];
-        const name = argvs.slice(2).join("-")
+        const name = argvs.slice(2).join('-')
 
         let compiled = _.template(' {{attribute}}="{{name}}"');
         const text = compiled({ attribute: attribute, name: name });
-        return text;
+        this.insertText(text);
     }
 
     openTag(argvs) {
@@ -36,8 +37,20 @@ class HtmlExecutor extends LanguageExecutor {
         }
         const text = compiled({ tag: tag });
 
-        return { text, isSingleTag };
+        this.insertText(text);
+
+        if (isSingleTag) {
+            return;
+        }
+
+        let lengthText = text.length;
+        lengthText = (parseInt(lengthText / 2))
+
+        let p = new vscode.Position(0, lengthText);
+        let s = new vscode.Selection(p, p);
+        vscode.window.activeTextEditor.selection = s;
     }
+
 }
 
 module.exports = HtmlExecutor;

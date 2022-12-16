@@ -6,71 +6,116 @@ const LanguageExecutor = require('./languageExecutor');
 class PythonExecutor extends LanguageExecutor {
     constructor() {
         super();
-        this.expressions = { "equal": "=", "equals": "=", "not": "!", "lees": "<", "greater": ">" };
+        this.expressions = { 'equal': '=', 'equals': '=', 'not': '!', 'lees': '<', 'greater': '>' };
     }
 
     addComment(argvs) {
-        let content = argvs.join(" ");
+        let content = argvs.join(' ');
         let compiled = _.template('# {{comment}}');
         const text = compiled({ comment: content });
-        return text;
+        this.insertText(text);
     }
 
     goToFunction(argvs) {
-        const functionName = "def " + _.camelCase(argvs.join(" "));
-        return functionName;
+        const functionName = 'def ' + _.camelCase(argvs.join(' '));
+        const editor = vscode.workspace.textDocuments[0];
+        const allText = editor.getText();
+        let matches = [...allText.matchAll(new RegExp(`${functionName}`, 'gm'))];
+
+        let activeText = vscode.window.activeTextEditor;
+
+        matches.forEach((match, index) => {
+            let startPosition = activeText.document.positionAt(match.index);
+            let newSelection = new vscode.Selection(startPosition, startPosition);
+            activeText.selection = newSelection;
+        });
     }
 
     addClass(argvs) {
-        const className = _.capitalize(_.camelCase(argvs.join(" ")));
+        const className = _.capitalize(_.camelCase(argvs.join(' ')));
         let compiled = _.template('class {{className}}:');
         const text = compiled({ className: className });
-        return text;
+        this.insertText(text);
+        this.moveCursor(['down']);
+        this.insertText('pass');
     }
 
     addMethod(argvs) {
-        const methodName = _.camelCase(argvs.join(" "));
+        const methodName = _.camelCase(argvs.join(' '));
         let compiled = _.template('def {{methodName}}(self):');
         const text = compiled({ methodName: methodName });
-        return text;
+        this.insertText(text);
+        this.moveCursor(['down']);
+        this.insertText('pass');
     }
 
     addParameter(argvs) {
-        const parameterName = _.snakeCase(argvs.join(" "));
-        return parameterName;
+        const regexForFunction = this.getRegexForFunction();
+        const currentLine = this.getCursorPosition().line;
+
+        const textCurrentLine = vscode.workspace.textDocuments[0].lineAt(currentLine).text;
+        let matches = [...textCurrentLine.matchAll(regexForFunction)];
+        let foundSelections = this.matchRegex(matches);
+        let activeText = vscode.window.activeTextEditor;
+
+        if (foundSelections[0]) {
+            this.moveCursorBeforeCharacter();  
+            let parameterExists = false;
+
+            const regexForExistingParameter = /\(.+?\)/g;
+            let matches = [...textCurrentLine.matchAll(regexForExistingParameter)];
+            let foundSelections = this.matchRegex(matches);
+            if(foundSelections[0]){
+                parameterExists = true;
+            }
+
+            const indexSeparator = argvs.indexOf('equals');
+            let parameterName = _.snakeCase(argvs.join(' '));
+            let text = parameterName;
+
+            if (indexSeparator != -1) {
+                text = this.evaluateArguments(argvs, indexSeparator)
+            }
+            if(parameterExists) {
+                text = ', ' + text;
+            }
+            this.insertText(text)      
+        }
     }
 
-    addReturn(variableName) {
+    addReturn(argvs) {
+        const variableName = this.evaluateTypeParameter(argvs);
         let compiled = _.template('return {{variableName}} ');
         const text = compiled({ variableName: variableName });
-        return text;
+        this.insertText(text);
     }
 
     async runActiveFile() {
-        //await vscode.commands.executeCommand("python.execSelectionInTerminal"); //for the selected code --> may add it later
-        await vscode.commands.executeCommand("python.execInTerminal");
+        //await this._executeCommand('python.execSelectionInTerminal'); //for the selected code --> may add it later
+        await this._executeCommand('python.execInTerminal');
     }
 
     getRegexForFunction() {
         return /def (\w+)\s*\((.*?)\):/g
     }
 
-    addVerificationCommand(argvs){
+    async addVerificationCommand(argvs){
         let command = argvs[0];
         let indexToStart = 1;
-        if(argvs[0] == "else" && argvs[1] == "if") {
-            command = command + " " + argvs[1];
+        if(argvs[0] == 'else' && argvs[1] == 'if') {
+            command = command + ' ' + argvs[1];
             indexToStart = 2;
         }   
         //argvs = argvs.slice(indexToStart)
         const expression = this.evaluateExpression(argvs.slice(indexToStart));
         let compiled = _.template('{{command}} {{expression}}: ');
         const text = compiled({ command: command, expression: expression});
-        return text;
+        this.insertText(text);
+        await this._executeCommand('cursorDown');
     }
 
     evaluateExpression(argvs) {  // i not equal zero --> i != 0
-        let modifiedExpression = "";
+        let modifiedExpression = '';
         for (let word of argvs) {
             if (this.expressions[word]) {
                 modifiedExpression = modifiedExpression.concat(this.expressions[word]);
@@ -82,23 +127,48 @@ class PythonExecutor extends LanguageExecutor {
         return modifiedExpression;
     }
 
-    addFor(argvs){
-        const indexIn = argvs.indexOf("in");
-        const iteratorName = _.snakeCase(argvs.slice(0,indexIn).join(" "));
+    async addFor(argvs){
+        const indexIn = argvs.indexOf('in');
+        const iteratorName = _.snakeCase(argvs.slice(0,indexIn).join(' '));
         
-        const indexRange = argvs.indexOf("range");
+        const indexRange = argvs.indexOf('range');
         let objectToLook = null;
         let compiled = null;
         if(indexRange != -1) {//for i in range(n)
-            objectToLook = _.snakeCase(argvs.slice(indexRange+1).join(" "));
+            objectToLook = _.snakeCase(argvs.slice(indexRange+1).join(' '));
             compiled = _.template('for {{iteratorName}} in range ({{objectToLook}}):');
         }
         else { //for elem in array
-            objectToLook = _.snakeCase(argvs.slice(indexIn+1).join(" "));
+            objectToLook = _.snakeCase(argvs.slice(indexIn+1).join(' '));
             compiled = _.template('for {{iteratorName}} in {{objectToLook}}:');
         }
         const text = compiled({iteratorName: iteratorName, objectToLook: objectToLook});
-        return text;
+        this.insertText(text);
+        await this._executeCommand('cursorDown');
+    }
+
+     // find & select
+    //https://stackoverflow.com/questions/67934437/vscode-is-there-any-api-to-get-search-results
+    //https://javascript.info/regexp-introduction
+    async findSelectAll(argvs) { //if function --> camel case, if parameter --> snake case
+        const editor = vscode.workspace.textDocuments[0];///de 0???????????????????????????????????????
+        const allText = editor.getText();
+        let objectToFind = argvs.slice(1).join(' ');
+
+        if (argvs[0] === 'functions') {
+            objectToFind = _.camelCase(objectToFind);
+        }
+        else if (argvs[0] === 'variables') {
+            objectToFind = _.snakeCase(objectToFind);
+        }
+        else {
+            this.showErrorMesage();
+        }
+
+        let matches = [...allText.matchAll(new RegExp(`${objectToFind}`, 'gm'))];
+        let foundSelections = this.matchRegex(matches)
+        let activeText = vscode.window.activeTextEditor;
+        activeText.selection = foundSelections[0];
     }
 }
 
