@@ -10,8 +10,8 @@ class HtmlExecutor extends LanguageExecutor {
     }
     
     async addComment(argvs) {
-        await this.getParsedExpression("alabala");
-        let content = argvs.join(' ')
+        let content = await this.getParsedExpression(argvs.join(' '));
+        // let content = argvs.join(' ')
         let compiled = _.template('<!--{{comment}}-->');
         const text = compiled({ comment: content })
         

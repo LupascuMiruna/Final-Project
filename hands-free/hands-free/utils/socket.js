@@ -29,7 +29,7 @@ class SocketManager {
   async initSubsribers(dispatcher) {
     this.socket.on("onMessage", (data) => {
       console.log(data);
-       dispatcher.dispatch(["add comment my comment"]);
+       dispatcher.dispatch(["add comment first person squared plus second dog"]);
       //dispatcher.dispatch(data.alternatives);
     });
   }

@@ -1,8 +1,10 @@
+from saytex import Saytex
 import socketio
 import eventlet
 
 sio = socketio.Server()
 app = socketio.WSGIApp(sio)
+saytex_compiler = Saytex()
 
 @sio.event
 def disconnect(sid):
@@ -19,7 +21,8 @@ def onCommandHandler(sid, data):
 
 @sio.on('onParse')
 def onParseHandler(sid, data):
-    return data
+    # saytex.saytexsyntax.SaytexSyntax.is_valid_saytex_syntax
+    return saytex_compiler.to_latex(data)
 
 
 eventlet.wsgi.server(eventlet.listen(('127.0.0.1', 3000)), app)
