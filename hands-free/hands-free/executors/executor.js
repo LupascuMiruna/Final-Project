@@ -8,6 +8,14 @@ class Executor {
         this.expressions = { 'equal': '=', 'equals': '=', 'not': '!', 'lees': '<', 'greater': '>' }; //less or equal
         //this.instances = instances
     }
+    // TODO: getParsedExpr ==> 
+    // 1. create argvs
+    // 2. send message socket.emit(onParse, argvs, data/ack => {.....})
+    // 3. wait for response from server
+    // 4. err handling
+    // 5. return parsed
+
+
     async test(argvs) {
         // const currentFolder = vscode.workspace.workspaceFolders[0].uri;
         // let directoryContent = await vscode.workspace.fs.readDirectory(currentFolder);
@@ -15,19 +23,7 @@ class Executor {
         // directoryContent = directoryContent.map(function (x) {
         //     const indexOfExtension = x.indexOf('.');
         //     return [x.slice(0, indexOfExtension), x.slice(indexOfExtension + 1)]
-        // })
-
-        // let modifiedExpression = '';
-        // for (let word of argvs) {
-        //     if (this.expressions[word]) {
-        //         modifiedExpression = modifiedExpression.concat(this.expressions[word]);
-        //     }
-        //     else {
-        //         modifiedExpression = modifiedExpression.concat(word)
-        //     }
         // }
-        // this.insertText(modifiedExpression);
-        // return modifiedExpression;
         await this._executeCommand('cursorDown');
     }
 

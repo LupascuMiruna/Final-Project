@@ -2,8 +2,8 @@ const vscode = require('vscode');
 
 const Executor = require('./executor');
 
-class SystemExecutor extends Executor{
-    constructor(){
+class SystemExecutor extends Executor {
+    constructor() {
         super();
     }
 
@@ -165,7 +165,7 @@ class SystemExecutor extends Executor{
         this.getCurrentEditor();
         await this._executeCommand('undo');
     }
-    
+
     async saveFile() {
         this.getCurrentEditor();
         await this._executeCommand('workbench.action.files.save');
@@ -177,8 +177,8 @@ class SystemExecutor extends Executor{
 
     async closeFile() {
         this.getCurrentEditor();
-        await 
-        this._executeCommand('workbench.action.closeActiveEditor');
+        await
+            this._executeCommand('workbench.action.closeActiveEditor');
     }
 
     async pasteFromClipboard() {
@@ -206,9 +206,6 @@ class SystemExecutor extends Executor{
         this.getCurrentEditor();
         this._executeCommand('editor.debug.action.showDebugHover');
     }
-
-
-
 }
 
 module.exports = SystemExecutor;
