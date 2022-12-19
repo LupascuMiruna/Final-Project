@@ -1,32 +1,14 @@
 const vscode = require('vscode');
-const io = require('socket.io-client');
 
-const dispatcher = require('./dispatcher')
-const Client = require('./client');
-// const client = new Client(dispatcher);
-
-// const socket = io.connect('http://localhost:3000', {reconnect: true});
-
-// // Add a connect listener
-// socket.on('connect', function () {
-//     console.log('Connected!');
-// });
-// const executor = new Executor();
-// const dispatcher = new Dispatcher(executor);
-// socket.on('onMessage', function (data) {
-// 			console.log(data);
-// 			dispatcher.dispatch(data.alternatives);
-// 		});
-
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-
+const dispatcher = require('./dispatcher');
+const socket = require('./utils/socket');
 
 /**
- *
+ * 
  * @param {vscode.ExtensionContext} context
  */
-function activate(context) {
+async function activate(context) {
+	await socket.initSubsribers(dispatcher);
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
@@ -56,8 +38,8 @@ function activate(context) {
 		// socket.on('onMessage', function (data) {
 		// 	dispatcher.dispatch(data)
 		// });
-		const data = ["open tag div"]
-		dispatcher.dispatch(data);
+		// const data = ["open tag div"]
+		// dispatcher.dispatch(data);
 
 	});
 

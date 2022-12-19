@@ -9,7 +9,8 @@ class HtmlExecutor extends LanguageExecutor {
         this.singleTags = ['area', 'source', 'br', 'link', 'input'];
     }
     
-    addComment(argvs) {
+    async addComment(argvs) {
+        await this.getParsedExpression("alabala");
         let content = argvs.join(' ')
         let compiled = _.template('<!--{{comment}}-->');
         const text = compiled({ comment: content })

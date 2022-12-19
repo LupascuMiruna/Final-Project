@@ -3,7 +3,6 @@ import eventlet
 
 sio = socketio.Server()
 app = socketio.WSGIApp(sio)
-eventlet.wsgi.server(eventlet.listen(('', 3000)), app)
 
 @sio.event
 def disconnect(sid):
@@ -13,7 +12,14 @@ def disconnect(sid):
 def connect(sid, environ, auth):
     print('connect')
 
+@sio.on('onCommand')
+def onCommandHandler(sid, data):
+    print(data)
+    sio.emit('onMessage', data)
 
-@sio.event
-def onCommand(sid, data):
-    app.emit('onMessage', data)
+@sio.on('onParse')
+def onParseHandler(sid, data):
+    return data
+
+
+eventlet.wsgi.server(eventlet.listen(('127.0.0.1', 3000)), app)
