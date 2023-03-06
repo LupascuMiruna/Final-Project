@@ -24,5 +24,5 @@ def onParseHandler(sid, data):
     # saytex.saytexsyntax.SaytexSyntax.is_valid_saytex_syntax
     return saytex_compiler.to_latex(data)
 
-
-eventlet.wsgi.server(eventlet.listen(('127.0.0.1', 3000)), app)
+def start_server():
+    eventlet.wsgi.server(eventlet.listen(('127.0.0.1', 3001)), app)
