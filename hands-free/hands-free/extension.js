@@ -8,6 +8,7 @@ const socket = require('./utils/socket');
  * @param {vscode.ExtensionContext} context
  */
 async function activate(context) {
+	// !!!!!!!!!!!!!!!!!!
 	await socket.initSubsribers(dispatcher);
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
@@ -15,6 +16,8 @@ async function activate(context) {
 	console.log('Congratulations, your extension "hands-free" is now active!');
 
 	let disposable = vscode.commands.registerCommand('hands-free.helloWorld', function () {
+		//socket.initSubsribers(dispatcher);
+		
 		// The code you place here will be executed every time your command is executed
 		// socket.on('onMessage', function (data) {
 		// 	console.log(data)

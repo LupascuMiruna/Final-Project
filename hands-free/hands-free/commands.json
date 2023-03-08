@@ -7,11 +7,13 @@
 		"method": "addMethod",
 		"parameter": "addParameter",
 		"return": "addReturn",
-		"for": "addFor",
 		"if": "addVerificationCommand",
 		"while": "addVerificationCommand",
-		"else": "addVerificationCommand"
+		"else": "addVerificationCommand",
+		"function": "addFunction"
 	},
+	"loop": "addLoop",
+	"assign": "assignValue",
 	"create": {
 
 	},

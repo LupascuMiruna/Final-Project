@@ -1,7 +1,7 @@
 const io = require("socket.io-client");
 
 class SocketManager {
-  constructor({ address = "http://localhost:3000", options = {} } = {}) {
+  constructor({ address = "http://localhost:3001", options = {} } = {}) {
     const connectOptions = Object.assign(options, { reconnect: true });
     this.socket = io.connect(address, connectOptions);
   }
@@ -28,10 +28,15 @@ class SocketManager {
 
   async initSubsribers(dispatcher) {
     this.socket.on("onMessage", (data) => {
-      console.log(data);
-       dispatcher.dispatch(["add comment first person squared plus second dog"]);
+      if(data.alternatives.length)
+      {
+        console.log(data);
+       //dispatcher.dispatch(["add comment first person squared plus second dog"]);
       //dispatcher.dispatch(data.alternatives);
+      //dispatcher.dispatch(["assign a plus b to c"]);
+      }
     });
+    dispatcher.dispatch(["add return my name string"])
   }
 }
 
