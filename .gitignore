@@ -270,3 +270,5 @@ dist
 .pnp.*
 
 .vscode
+
+./client-extension

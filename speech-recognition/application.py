@@ -1,6 +1,6 @@
 import threading
 
-from server import start_server
+from ws_server import start_server
 from main import Listener
 from tkinter import *
 from tkinter import ttk

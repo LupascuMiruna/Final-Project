@@ -1,3 +1,5 @@
+# Acest fisier contine logica server-ului de web sockets care actioneaza ca un Proxy intre clientul Speech-to-text si Extensia propriu-zisa
+
 from saytex import Saytex
 import socketio
 import eventlet
@@ -14,6 +16,7 @@ def disconnect(sid):
 def connect(sid, environ, auth):
     print('connect')
 
+# Primeste comenzile de la clientul Speech-to-text si le transmite catre Extensie
 @sio.on('onCommand')
 def onCommandHandler(sid, data):
     print(data)
