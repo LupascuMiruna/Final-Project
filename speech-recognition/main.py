@@ -1,7 +1,11 @@
-import speech_recognition as sr
+import azure.cognitiveservices.speech as speechsdk
 import socketio
+import os
 
 sio = socketio.Client()
+subscription = os.environ.get('AZURE_API')
+speech_config = speechsdk.SpeechConfig(subscription=subscription, region="westeurope")
+speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
 
 @sio.event
 def connect():
@@ -22,24 +26,13 @@ class Listener:
 
     # toDo verify microphone !!
     def speech_to_text(self):
-        r = sr.Recognizer()
+        # read the audio data from the default microphone
+        print("Start recording...")
+        result = speech_recognizer.recognize_once_async().get()
 
-        with sr.Microphone() as source:
-            # read the audio data from the default microphone
-            recognition_response = []
-            
-            print("Start recording...")
-            r.adjust_for_ambient_noise(source)
-            audio_data = r.listen(source, phrase_time_limit=10)
-            print("Recognizing...")
-            recognition_response = r.recognize_google(
-                audio_data, language="en-US", show_all=True)
-            if len(recognition_response) != 0:
-                recognition_response = list(map(
-                    lambda alternative: alternative['transcript'], recognition_response['alternative']))
-                return recognition_response
-            
+        if result == '':
             return []
+        return [result.text[:-1].lower()]
 
     def run_listener(self):
         alternatives = []
@@ -48,7 +41,7 @@ class Listener:
         while (self.continue_listening(alternatives)):
 
             alternatives = self.speech_to_text()
-            if alternatives is not None:
+            if len(alternatives) > 0:
                 print(alternatives)
                 self.sio.emit('onCommand', {'alternatives': alternatives})
         # self.sio.wait()
