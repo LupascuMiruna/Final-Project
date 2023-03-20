@@ -34,7 +34,7 @@ class Dispatcher {
             var index = 0;
 
             let path = '';
-            for (const [index, word] of words.entries()) {
+            for (let [index, word] of words.entries()) {
                 path = index === 0 ? word : `${path}.${word}`;
                 const resultAtPath = _.get(this.commands, path);
 
@@ -59,6 +59,12 @@ class Dispatcher {
                     break;
                 }
 
+                if(words[index] == 'else' || words[index] == 'if') {
+                    index--;
+                }
+                if(words[index-1] == 'else') {
+                    index--;
+                }
                 currentExecutor[resultAtPath](words.slice(index + 1));
                 break;
             }

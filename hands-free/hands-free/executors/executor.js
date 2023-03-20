@@ -1,5 +1,6 @@
 const vscode = require("vscode");
 const _ = require("lodash");
+// const extensionFiles = require('./extensionFiles.json');
 
 _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 
@@ -47,7 +48,7 @@ class Executor {
   }
 
   async _executeCommand(action) {
-    return this._executeCommand(`workbench.action.${action}`);
+    return vscode.commands.executeCommand(action);
   }
 
   filePath(fileName, fileExtension) {
@@ -57,9 +58,18 @@ class Executor {
     return filePath;
   }
 
-  async createFile(name, extension) {
-    //create file txt first file  / create file python main
-    const fileName = _.camelCase(name);
+  async addFile(argvs) {
+    //add file txt first file  / add file python main
+    let extension = argvs[0];
+    argvs = argvs.slice(1)
+    const fileName = _.camelCase(argvs.join(''));
+
+    if(extension == "python") {
+      extension = "py";
+    } else {
+      extension = "txt";
+    }
+
     const filePath = this.filePath(fileName, extension);
     if (filePath != NaN) {
       await vscode.workspace.fs.writeFile(
@@ -69,8 +79,10 @@ class Executor {
       await vscode.window.showTextDocument(vscode.Uri.file(filePath));
     } else {
       this.showErrorMesage();
+      return;
     }
   }
+
   async getCurrentEditor() {
     const editor = vscode.window.activeTextEditor;
     await vscode.window.showTextDocument(editor.document);
@@ -94,6 +106,7 @@ class Executor {
     let content = argvs.join(" ");
     this.insertText(content);
   }
+
   showErrorMesage(message = "Incorect format, please review the rules") {
     vscode.window.showInformationMessage(message);
   }

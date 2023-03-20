@@ -12,7 +12,7 @@
 		"else": "addVerificationCommand",
 		"function": "addFunction"
 	},
-	"loop": "addLoop",
+	"loop": "loop",
 	"assign": "assignValue",
 	"create": {
 
@@ -36,7 +36,7 @@
 			"down": "copyLineDown",
 			"up": "copyLineUp"
 		},
-		"path": "copyPath"
+		"pathway": "copyPath"
 	},
 	"cut": {
 		"text": "cutText"
@@ -67,7 +67,7 @@
 		"terminal": "clearTerminal"
 	},
 	"go": {
-		"function": "goToFunction",
+		"function": "goFunction",
 		"character": "moveCursorToCharacter",
 		"definition": "goToDefinition"
 	},
@@ -90,7 +90,9 @@
 		"hover": "showHoverDebug",
 		"preview": "markdownShowPreview"
 	},
-	"tab": "insertTab",
+	"insert": {
+		"tab": "insertTab"
+	},
 	"undo": "undo",
 	"quick": "quickOpen",
 	"type": {

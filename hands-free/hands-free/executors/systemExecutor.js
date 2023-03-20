@@ -89,9 +89,6 @@ class SystemExecutor extends Executor {
 
     async quickOpen() {
         await this._executeCommand('workbench.action.quickOpen');
-        // await this._executeCommand('workbench.action.quickOpenPreviousRecentlyUsedEditor');
-        // select command
-        // enter command
     }
 
     async openCurrentFolder() {
@@ -103,7 +100,7 @@ class SystemExecutor extends Executor {
     }
 
     async openTerminal() {
-        await this._executeCommand('workbench.action.files.openNativeConsole');
+        await this._executeCommand('workbench.action.terminal.toggleTerminal')
     }
 
     async clearTerminal() {
@@ -154,7 +151,7 @@ class SystemExecutor extends Executor {
     }
 
     copyToClipboard() {
-        this._executeCommand('editor.action.clipboardCutAction');
+        this._executeCommand('editor.action.clipboardCopyAction');
     }
 
     async cutText() {

@@ -32,11 +32,11 @@ class SocketManager {
       {
         console.log(data);
        //dispatcher.dispatch(["add comment first person squared plus second dog"]);
-      //dispatcher.dispatch(data.alternatives);
+      dispatcher.dispatch(data.alternatives);
       //dispatcher.dispatch(["assign a plus b to c"]);
       }
     });
-    dispatcher.dispatch(["add return my name string"])
+   // dispatcher.dispatch(["add return my name string"])
   }
 }
 

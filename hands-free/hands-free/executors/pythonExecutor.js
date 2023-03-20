@@ -6,7 +6,7 @@ const LanguageExecutor = require('./languageExecutor');
 class PythonExecutor extends LanguageExecutor {
     constructor() {
         super();
-        this.expressions = { 'equal': '=', 'equals': '=', 'not': '!', 'lees': '<', 'greater': '>' };
+        this.expressions = { 'equal': '=', 'equals': '=', 'not': '!', 'less': '<', 'greater': '>' };
     }
 
     addComment(argvs) {
@@ -16,7 +16,7 @@ class PythonExecutor extends LanguageExecutor {
         this.insertText(text);
     }
 
-    goToFunction(argvs) {
+    goFunction(argvs) {
         const functionName = 'def ' + _.camelCase(argvs.join(' '));
         const editor = vscode.workspace.textDocuments[0];
         const allText = editor.getText();
@@ -83,7 +83,11 @@ class PythonExecutor extends LanguageExecutor {
         }
     }
 
-    //this method more difficult --> add return number/string ...
+    
+    // return true -->
+    // return string my string --> "my string"
+    // return number 12 --> 12
+    // return my variable --> myVariable
     addReturn(argvs) {
         const variableName = this.evaluateTypeParameter(argvs);
         let compiled = _.template('return {{variableName}} ');
@@ -115,6 +119,7 @@ class PythonExecutor extends LanguageExecutor {
         await this._executeCommand('cursorDown');
     }
 
+    // i [not] equal/less/greater 0
     evaluateExpression(argvs) {  // i not equal zero --> i != 0
         let modifiedExpression = '';
         for (let word of argvs) {
@@ -148,7 +153,10 @@ class PythonExecutor extends LanguageExecutor {
     //     this.insertText(text);
     //     // await this._executeCommand('cursorDown');
     // }
-        async addLoop(argvs){
+
+        // loop data in data center
+        // loop data in range data_center
+        async loop(argvs){
         const indexIn = argvs.indexOf('in');
         const iteratorName = _.snakeCase(argvs.slice(0,indexIn).join(' '));
         
@@ -192,6 +200,7 @@ class PythonExecutor extends LanguageExecutor {
         activeText.selection = foundSelections[0];
     }
 
+    //asign x plus 2 to data
     async assignValue(argvs) { //leftSide = rightSide(leftTerm operation rightTerm)
         let indexTo;
         let operations = [("plus", "+"), ("minus", "-"), ("divide", "/"), ("modulo", "%")];

@@ -11,6 +11,9 @@ class LanguageExecutor extends Executor{
         await this._executeCommand('editor.action.revealDefinition');
     }
     
+    // true
+    // string my string
+    // my variable
     evaluateTypeParameter(argvs = []) {
         const evaluateMap = {
             number: (params) => {
@@ -35,11 +38,13 @@ class LanguageExecutor extends Executor{
         return evaluateMap[lastArgument](argvs);
     }
 
+    // index separator delimits the variable from its value
+    // its value can be  true/ number 12/ string my value/ other_variable
     evaluateArguments(argvs, indexSeparator) { // separates de name of the parameter from the implicit value
         const parameterName = _.snakeCase(argvs.slice(0,indexSeparator).join(' '));
         let parameterValue = this.evaluateTypeParameter(argvs.slice(indexSeparator+1));
-        let compiled = _.template('{{parameterName}}={{parameterValue}}');
-        const text = compiled({ parameterName: parameterName, parameterValue: parameterValue });
+        let compiled = _.template('{{parameterName1}}={{parameterValue1}}');
+        const text = compiled({ parameterName1: parameterName, parameterValue1: parameterValue });
         return text;  
     }
 }
