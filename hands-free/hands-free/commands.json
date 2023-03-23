@@ -15,7 +15,7 @@
 	"loop": "loop",
 	"assign": "assignValue",
 	"create": {
-
+		
 	},
 	"close": {
 		"file": "closeFile"
@@ -92,7 +92,8 @@
 	},
 	"insert": {
 		"tab": "insertTab",
-		"line": "insertLine"
+		"line": "insertLine",
+		"doctype": "insertDoctype"
 	},
 	"undo": "undo",
 	"quick": "quickOpen",

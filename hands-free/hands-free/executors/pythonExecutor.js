@@ -36,7 +36,7 @@ class PythonExecutor extends LanguageExecutor {
         let compiled = _.template('class {{className}}:');
         const text = compiled({ className: className });
         this.insertText(text);
-        this.moveCursor(["down"])
+        this.insertLine();
     }
 
     addMethod(argvs) {
@@ -44,7 +44,7 @@ class PythonExecutor extends LanguageExecutor {
         let compiled = _.template('def {{methodName}}(self):');
         const text = compiled({ methodName: methodName });
         this.insertText(text);
-        // this.moveCursor(['down']);
+        this.insertLine();
     }
 
     addParameter(argvs) {

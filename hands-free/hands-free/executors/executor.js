@@ -115,6 +115,13 @@ class Executor {
     vscode.window.showInformationMessage(message);
   }
 
+  _changeCursorPosition(line, column) {
+    const editor = this._getTextEditor();
+    let newPosition = new vscode.Position(line, column);
+    let newSelection = new vscode.Selection(newPosition, newPosition);
+    editor.selection = newSelection;
+  }
+
   moveCursor(argvs) {
     const editor = this._getTextEditor();
     const cursorPosition = this.getCursorPosition();
@@ -147,9 +154,7 @@ class Executor {
       this.showErrorMesage();
       return;
     }
-    let newPosition = new vscode.Position(nextLine, nextColumn);
-    let newSelection = new vscode.Selection(newPosition, newPosition);
-    editor.selection = newSelection;
+    this._changeCursorPosition(nextLine, nextColumn);
   }
 
   // works also for the last line of the document

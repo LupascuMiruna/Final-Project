@@ -7,6 +7,7 @@ class HtmlExecutor extends LanguageExecutor {
     constructor() {
         super();
         this.singleTags = ['area', 'source', 'br', 'link', 'input'];
+        this.notInlineTags = ['html', 'body', 'div']
     }
     
     async addComment(argvs) {
@@ -46,12 +47,18 @@ class HtmlExecutor extends LanguageExecutor {
 
         let lengthText = text.length;
         lengthText = (parseInt(lengthText / 2))
+        this._changeCursorPosition(undefined, lengthText)
 
-        let p = new vscode.Position(0, lengthText);
-        let s = new vscode.Selection(p, p);
-        this._getTextEditor().selection = s;
+        if(this.notInlineTags.includes(tag)) {
+            this.insertLine();
+        }
     }
 
+    insertDoctype(argvs) {
+        const text = "<!DOCTYPE html>";
+        this.insertText(text);
+        this.insertLine()
+    }
 }
 
 module.exports = HtmlExecutor;
