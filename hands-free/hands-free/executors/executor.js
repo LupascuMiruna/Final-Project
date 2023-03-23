@@ -82,22 +82,24 @@ class Executor {
       return;
     }
   }
-
-  
+ 
+  _getTextEditor() {
+    return vscode.window.activeTextEditor;
+  }
 
   async getCurrentEditor() {
-    const editor = vscode.window.activeTextEditor;
+    const editor = this._getTextEditor();
     await vscode.window.showTextDocument(editor.document);
   }
 
   getCursorPosition() {
-    let activeEditor = vscode.window.activeTextEditor;
+    let activeEditor = this._getTextEditor();
     let cursorPosition = activeEditor.selection.active;
     return cursorPosition;
   }
 
   insertText(text) {
-    let activeEditor = vscode.window.activeTextEditor;
+    let activeEditor = this._getTextEditor();
     let cursorPosition = this.getCursorPosition();
     activeEditor.edit((editBuilder) => {
       editBuilder.insert(cursorPosition, text);
@@ -114,7 +116,7 @@ class Executor {
   }
 
   moveCursor(argvs) {
-    const editor = vscode.window.activeTextEditor;
+    const editor = this._getTextEditor();
     const cursorPosition = this.getCursorPosition();
 
     let nextLine = cursorPosition.line;
@@ -150,8 +152,10 @@ class Executor {
     editor.selection = newSelection;
   }
 
+  // works also for the last line of the document
+  // inserts a new line below the current
   insertLine(argvs){
-    const editor = vscode.window.activeTextEditor;
+    const editor = this._getTextEditor();
     if (editor) {
         const currentPosition = this.getCursorPosition();
         this._executeCommand('editor.action.insertLineAfter');
@@ -161,7 +165,7 @@ class Executor {
 
   selectBlock(argvs) {
     //from line ls to line lf
-    const editor = vscode.window.activeTextEditor;
+    const editor = this._getTextEditor();
     const startLine = parseInt(argvs[2]);
     const stopLine = parseInt(argvs[5]);
 
@@ -178,7 +182,7 @@ class Executor {
   matchRegex(matches, endEqualsStart = false) {
     // 2nd parameter for the moment we don't want to select the text
     let foundSelections = [];
-    let activeText = vscode.window.activeTextEditor;
+    let activeText = this._getTextEditor();
 
     matches.forEach((match, index) => {
       let startPosition = activeText.document.positionAt(match.index);
@@ -198,7 +202,7 @@ class Executor {
     const regexp = /(?<=\()/g; //for (
     let matches = [...allText.matchAll(regexp)];
 
-    let activeText = vscode.window.activeTextEditor;
+    let activeText = this._getTextEditor();
 
     matches.forEach((match, index) => {
       let startPosition = activeText.document.positionAt(match.index);
@@ -214,7 +218,7 @@ class Executor {
     const regexp = /.(?=\))/g; //for (
     let matches = [...allText.matchAll(regexp)];
 
-    let activeText = vscode.window.activeTextEditor;
+    let activeText = this._getTextEditor();
 
     matches.forEach((match, index) => {
       let startPosition = activeText.document.positionAt(match.index + 1);

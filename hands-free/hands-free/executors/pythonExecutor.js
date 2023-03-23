@@ -22,7 +22,7 @@ class PythonExecutor extends LanguageExecutor {
         const allText = editor.getText();
         let matches = [...allText.matchAll(new RegExp(`${functionName}`, 'gm'))];
 
-        let activeText = vscode.window.activeTextEditor;
+        let activeText = this._getTextEditor();
 
         matches.forEach((match, index) => {
             let startPosition = activeText.document.positionAt(match.index);
@@ -54,7 +54,7 @@ class PythonExecutor extends LanguageExecutor {
         const textCurrentLine = vscode.workspace.textDocuments[0].lineAt(currentLine).text;
         let matches = [...textCurrentLine.matchAll(regexForFunction)];
         let foundSelections = this.matchRegex(matches);
-        let activeText = vscode.window.activeTextEditor;
+        let activeText = this._getTextEditor();
 
         if (foundSelections[0]) {
             this.moveCursorBeforeCharacter();  
@@ -194,7 +194,7 @@ class PythonExecutor extends LanguageExecutor {
 
         let matches = [...allText.matchAll(new RegExp(`${objectToFind}`, 'gm'))];
         let foundSelections = this.matchRegex(matches)
-        let activeText = vscode.window.activeTextEditor;
+        let activeText = this._getTextEditor();
         activeText.selection = foundSelections[0];
     }
 

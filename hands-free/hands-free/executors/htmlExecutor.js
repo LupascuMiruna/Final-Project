@@ -49,7 +49,7 @@ class HtmlExecutor extends LanguageExecutor {
 
         let p = new vscode.Position(0, lengthText);
         let s = new vscode.Selection(p, p);
-        vscode.window.activeTextEditor.selection = s;
+        this._getTextEditor().selection = s;
     }
 
 }
