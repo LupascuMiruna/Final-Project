@@ -83,6 +83,8 @@ class Executor {
     }
   }
 
+  
+
   async getCurrentEditor() {
     const editor = vscode.window.activeTextEditor;
     await vscode.window.showTextDocument(editor.document);
@@ -123,10 +125,14 @@ class Executor {
         this.showErrorMesage();
         return;
       }
-      nextLine = parseInt(argvs[1]);
+      nextLine = parseInt(argvs[1]) - 1;
       nextColumn = 0;
     } else if (argvs[0] === "column") {
-      nextColumn = 0;
+      if (isNaN(parseInt(argvs[1]))) {
+        this.showErrorMesage();
+        return;
+      }
+      nextColumn = parseInt(argvs[1]) - 1;
     } else if (argvs[0] === "right") {
       nextColumn += 1;
     } else if (argvs[0] === "left") {
@@ -139,10 +145,18 @@ class Executor {
       this.showErrorMesage();
       return;
     }
-
     let newPosition = new vscode.Position(nextLine, nextColumn);
     let newSelection = new vscode.Selection(newPosition, newPosition);
     editor.selection = newSelection;
+  }
+
+  insertLine(argvs){
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const currentPosition = this.getCursorPosition();
+        this._executeCommand('editor.action.insertLineAfter');
+        editor.selection = new vscode.Selection(currentPosition.translate(1), currentPosition.translate(1));
+    }
   }
 
   selectBlock(argvs) {

@@ -20,7 +20,7 @@ class HtmlExecutor extends LanguageExecutor {
 
     addAttribute(argvs) {
         const attribute = argvs[0];
-        const name = argvs.slice(2).join('-')
+        const name = argvs.slice(1).join('-')
 
         let compiled = _.template(' {{attribute}}="{{name}}"');
         const text = compiled({ attribute: attribute, name: name });
