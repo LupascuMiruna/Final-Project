@@ -44,7 +44,7 @@ class PythonExecutor extends LanguageExecutor {
         let compiled = _.template('def {{methodName}}(self):');
         const text = compiled({ methodName: methodName });
         this.insertText(text);
-        this.moveCursor(['down']);
+        // this.moveCursor(['down']);
     }
 
     addParameter(argvs) {
@@ -80,7 +80,6 @@ class PythonExecutor extends LanguageExecutor {
             this.insertText(text)      
         }
     }
-
     
     // return true -->
     // return string my string --> "my string"
@@ -201,8 +200,18 @@ class PythonExecutor extends LanguageExecutor {
     //asign x plus 2 to data
     async assignValue(argvs) { //leftSide = rightSide(leftTerm operation rightTerm)
         let indexTo;
-        let operations = [("plus", "+"), ("minus", "-"), ("divide", "/"), ("modulo", "%")];
         let currentOperation;
+        const mathOperators = {
+            "plus": "+",
+            "minus": "-",
+            "divide": "/",
+            "modulo": "%"
+          };
+
+        const sentence = argvs.join(" ");
+        const regex = new RegExp(Object.keys(mathOperators).join("|"), "gi");
+        const result = sentence.replace(regex, match => mathOperators[match.toLowerCase()]);
+        argvs = result.split(" ");
 
         if(argvs.includes("to")){
             indexTo = argvs.indexOf('to');
@@ -210,27 +219,9 @@ class PythonExecutor extends LanguageExecutor {
         else {
             this.showErrorMesage();
         }
-        const leftSide = _.snakeCase(argvs.slice(indexTo + 1).join(' '));
-
-        let indexOperation = -1;
-        for (let operation in operations){
-            if(argvs.includes(operation[0])){
-                indexOperation = argvs.indexOf(operation[0]);
-                currentOperation = operation[1];
-                break;
-            }
-        }
-        
-        let rightSide;
-        if(indexOperation == -1) { //just a = b
-            rightSide = _.snakeCase(argvs.slice(0, indexTo).join(' '));
-        }
-        else {
-            const leftTerm = _.snakeCase(argvs.slice(0, indexOperation).join(' '));
-            const rightTerm = _.snakeCase(argvs.slice(indexOperation + 1, indexTo).join(' '));
-            rightSide =  leftTerm.concat(" ", currentOperation, " ", rightTerm)
-        }
-        
+        const leftSide = argvs.slice(indexTo + 1).join(' ');
+        const rightSide = argvs.slice(0, indexTo).join(' ');
+    
         const compiled = _.template('{{leftSide}} = {{rightSide}}');
         const text = compiled({ leftSide: leftSide, rightSide: rightSide});
         this.insertText(text);

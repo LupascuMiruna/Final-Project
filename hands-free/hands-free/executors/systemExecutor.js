@@ -127,7 +127,7 @@ class SystemExecutor extends Executor {
         this._executeCommand('editor.action.indentLines');
     }
 
-    outdentLine() {
+    removeIndent() {
         this._executeCommand('editor.action.outdentLines');
     }
 

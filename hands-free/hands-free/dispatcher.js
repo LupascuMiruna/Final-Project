@@ -30,7 +30,10 @@ class Dispatcher {
 
     dispatch(alternatives) {
         for (const alternative of alternatives) {
-            const words = alternative.split(' ').map((word) => _.toLower(word));
+            const words = alternative.split(' ').map((word) => {
+                const cleanedWord = word.replace(/[^\w\s.+\-/%]/g, '');
+                return _.toLower(cleanedWord);
+              });
             var index = 0;
 
             let path = '';

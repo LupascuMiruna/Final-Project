@@ -47,8 +47,8 @@
 	"indent": {
 		"line": "indentLine"
 	},
-	"outdent": {
-		"outdent": "outdentLine"
+	"remove": {
+		"indent": "removeIndent"
 	},
 	"save": {
 		"file": "saveFile",
