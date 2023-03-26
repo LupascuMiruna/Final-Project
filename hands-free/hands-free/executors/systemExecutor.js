@@ -14,24 +14,26 @@ class SystemExecutor extends Executor {
         return repo;
     }
 
-    async checkoutBranch(argvs) {  //!!! it brings the changes on the new branch
+    async gitCheckout(argvs) {  //!!! it brings the changes on the new branch
         const branchName = argvs.join(' ');
         const repo = this.getRepo();
         await repo.checkout(branchName);
     }
 
-    async commitChanges(argvs) {
+    async gitCommit(argvs) {
         const commitMessage = argvs.join(' ');
         const repo = this.getRepo();
         await repo.commit(commitMessage, { all: true });
     }
 
-    async pushCommit() {
+    async gitPush() {
         const repo = this.getRepo();
-        await repo.checkout('main');
+        await repo.push('origin', 'main', true)
+        .then(() => console.log('Pushed changes to origin/main'))
+        .catch((err) => console.error('Error pushing changes:', err));
     }
 
-    async pullChanges() {
+    async gitPull() {
         const repo = this.getRepo();
         await repo.pull();
     }

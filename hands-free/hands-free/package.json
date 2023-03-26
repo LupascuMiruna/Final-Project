@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.21",
+    "simple-git": "^3.17.0",
     "socket.io": "^4.5.3",
     "socket.io-client": "^4.5.3",
     "words-to-numbers": "^1.5.1"

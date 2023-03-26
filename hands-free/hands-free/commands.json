@@ -102,9 +102,11 @@
 		"command": "typeCommandTerminal"
 	},
 	"run": "runActiveFile",
-	"checkout": "checkoutBranch",
-	"push": "pushCommit",
-	"commit": "commitChanges",
-	"pull": "pullChanges",
+	"git": {
+		"checkout": "gitCheckout",
+		"push": "gitPush",
+		"commit": "gitCommit",
+		"pull": "gitPull"
+	},
 	"test": "test"
 }
