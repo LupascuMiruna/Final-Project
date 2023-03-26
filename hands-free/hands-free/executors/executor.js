@@ -82,6 +82,7 @@ class Executor {
       return;
     }
   }
+
  
   _getTextEditor() {
     return vscode.window.activeTextEditor;

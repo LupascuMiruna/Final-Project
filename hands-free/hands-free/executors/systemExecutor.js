@@ -41,7 +41,7 @@ class SystemExecutor extends Executor {
     async mergeBase(argvs) {
         //toDo
     }
-
+   
     async GITCANDIIVAVENITIMPUL(argvs) {
         //https://stackoverflow.com/questions/46511595/how-to-access-the-api-for-git-in-visual-studio-code
         //https://github.com/microsoft/vscode/blob/main/extensions/git/src/api/api1.ts#L160

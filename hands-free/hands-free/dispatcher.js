@@ -16,12 +16,14 @@ class Dispatcher {
         this._initCommands();
     }
 
-    _initCommands() {
-        for (let language in this.languages) {
-            commands['create'][language] = 'createFile';
-        }
-        this.commands = commands;
-    }
+    // hard to pass argvs because already parsed
+
+    // _initCommands() {
+    //     for (let language in this.languages) {
+    //         commands['create'][language] = 'createFile';
+    //     }
+    //     this.commands = commands;
+    // }
 
     _getCurrentExecutor() {
         const currentLanguage = vscode.window.activeTextEditor.document.languageId;
