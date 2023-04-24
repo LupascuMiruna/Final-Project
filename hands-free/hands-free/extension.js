@@ -8,7 +8,6 @@ const socket = require('./utils/socket');
  * @param {vscode.ExtensionContext} context
  */
 async function activate(context) {
-	// !!!!!!!!!!!!!!!!!!
 	await socket.initSubsribers(dispatcher);
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)

@@ -6,14 +6,14 @@ const commands = require('./commands.json');
 const languages = require('./languages.json');
 const HtmlExecutor = require('./executors/htmlExecutor');
 const PythonExecutor = require('./executors/pythonExecutor');
-const SystemExecutor = require('./executors/systemExecutor');
+const SystemWrapper = require('./executors/systemWrapper');
 
 class Dispatcher {
     constructor(executors) {
         this.executors = executors;
         this.languages = languages;
 
-        this._initCommands();
+        // this._initCommands();
     }
 
     // hard to pass argvs because already parsed
@@ -30,48 +30,64 @@ class Dispatcher {
         return this.executors[currentLanguage];
     }
 
-    dispatch(alternatives) {
-        for (const alternative of alternatives) {
-            const words = alternative.split(' ').map((word) => {
-                const cleanedWord = word.replace(/[^\w\s.+\-/%]/g, '');
-                return _.toLower(cleanedWord);
-              });
-            var index = 0;
+    dispatch(alternatives, method, argvs) {
+        let currentExecutor = this._getCurrentExecutor();
 
-            let path = '';
-            for (let [index, word] of words.entries()) {
-                path = index === 0 ? word : `${path}.${word}`;
-                const resultAtPath = _.get(this.commands, path);
+        if(method) {
+            if (!currentExecutor[method]) {
+                currentExecutor = this.executors.system;
+            }
+            
+            // If there is not on the System executor, too, cosider that it doesn't exist.
+            if (!currentExecutor[method]) {
+                console.log('Command not found');
+            }
+            else {
+                currentExecutor[method]("", argvs);
+            }
+        }
+        else {
+            for (const alternative of alternatives) {
+                const words = alternative.split(' ').map((word) => {
+                    const cleanedWord = word.replace(/[^\w\s.+\-/%]/g, '');
+                    return _.toLower(cleanedWord);
+                });
+                var index = 0;
 
-                if (!resultAtPath) {
-                    console.log('Command not found');
+                let path = '';
+                for (let [index, word] of words.entries()) {
+                    path = index === 0 ? word : `${path}.${word}`;
+                    const resultAtPath = _.get(this.commands, path);
+
+                    if (!resultAtPath) {
+                        console.log('Command not found');
+                        break;
+                    }
+
+                    if (!_.isString(resultAtPath)) {
+                        continue;
+                    }
+
+                    // If there is not the method on the current executor, fallback to SystemExecutor
+                    if (!currentExecutor[resultAtPath]) {
+                        currentExecutor = this.executors.system;
+                    }
+                    
+                    // If there is not on the System executor, too, cosider that it doesn't exist.
+                    if (!currentExecutor[resultAtPath]) {
+                        console.log('Command not found');
+                        break;
+                    }
+
+                    if(words[index] == 'else' || words[index] == 'if') {
+                        index--;
+                    }
+                    if(words[index-1] == 'else') {
+                        index--;
+                    }
+                    currentExecutor[resultAtPath](words.slice(index + 1), []);
                     break;
                 }
-
-                if (!_.isString(resultAtPath)) {
-                    continue;
-                }
-
-                let currentExecutor = this._getCurrentExecutor();
-                // If there is not the method on the current executor, fallback to SystemExecutor
-                if (!currentExecutor[resultAtPath]) {
-                    currentExecutor = this.executors.system;
-                }
-                
-                //If there is not on the System executor, too, cosider that it doesn't exist.
-                if (!currentExecutor[resultAtPath]) {
-                    console.log('Command not found');
-                    break;
-                }
-
-                if(words[index] == 'else' || words[index] == 'if') {
-                    index--;
-                }
-                if(words[index-1] == 'else') {
-                    index--;
-                }
-                currentExecutor[resultAtPath](words.slice(index + 1));
-                break;
             }
         }
     }
@@ -81,5 +97,5 @@ class Dispatcher {
 module.exports = new Dispatcher({
     html: new HtmlExecutor(),
     python: new PythonExecutor(),
-    system: new SystemExecutor(),
+    system: new SystemWrapper(),
 });

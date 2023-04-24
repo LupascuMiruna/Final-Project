@@ -84,7 +84,7 @@
 		"debug": "continueDebug"
 	},
 	"toggle": {
-		"breakpoint": "inlineBreakpoint"
+		"breakpoint": "toggleBreakpoint"
 	},
 	"show": {
 		"hover": "showHoverDebug",

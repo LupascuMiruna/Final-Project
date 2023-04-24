@@ -31,12 +31,9 @@ class SocketManager {
       if(data.alternatives.length)
       {
         console.log(data);
-       //dispatcher.dispatch(["add comment first person squared plus second dog"]);
-      dispatcher.dispatch(data.alternatives);
-      //dispatcher.dispatch(["assign a plus b to c"]);
+        dispatcher.dispatch(data.alternatives, data.method, data.argvs);
       }
     });
-   // dispatcher.dispatch(["add return my name string"])
   }
 }
 

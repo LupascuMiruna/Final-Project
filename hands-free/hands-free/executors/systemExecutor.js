@@ -67,26 +67,9 @@ class SystemExecutor extends Executor {
         console.log({ branch, commit, lastMergeCommit, needsSync: lastMergeCommit !== commit });
     }
 
-    async openFile(argvs) {
-        //directory content [['a', 'txt], ['a', 'json']....]
-
-        const currentFolder = vscode.workspace.workspaceFolders[0].uri;
-        let directoryContent = await vscode.workspace.fs.readDirectory(currentFolder);
-        directoryContent = directoryContent.map(function (x) { return x[0]; })
-        directoryContent = directoryContent.map(function (x) {
-            const indexOfExtension = x.indexOf('.');
-            return [x.slice(0, indexOfExtension), x.slice(indexOfExtension + 1)]
-        })
-
-        const searchedFile = _.camelCase(argvs);
-        for (let file of directoryContent) { //take the first file with this name
-            if (file[0] == searchedFile) {
-                let filePath = this.filePath(searchedFile, file[1]);
-                await vscode.window.showTextDocument(vscode.Uri.file(filePath));
-                return;
-            }
-        }
-        this.showErrorMesage();
+    async openFile(sentence) {
+        const searchedFile = _.camelCase(sentence);
+        this.searchFile(searchedFile)
     }
 
     async quickOpen() {
@@ -197,7 +180,7 @@ class SystemExecutor extends Executor {
         this._executeCommand('workbench.action.debug.stop');
     }
 
-    async inlineBreakpoint() {
+    async toggleBreakpoint() {
         await this._executeCommand('editor.debug.action.toggleInlineBreakpoint');
     }
 
@@ -205,6 +188,27 @@ class SystemExecutor extends Executor {
         this.getCurrentEditor();
         this._executeCommand('editor.debug.action.showDebugHover');
     }
+
+    // Helper functions
+    async searchFile(searchedFile) {
+        const currentFolder = vscode.workspace.workspaceFolders[0].uri;
+        let directoryContent = await vscode.workspace.fs.readDirectory(currentFolder);
+        directoryContent = directoryContent.map(function (x) { return x[0]; })
+        directoryContent = directoryContent.map(function (x) {
+            const indexOfExtension = x.indexOf('.');
+            return [x.slice(0, indexOfExtension), x.slice(indexOfExtension + 1)]
+        })
+
+        for (let file of directoryContent) { //take the first file with this name
+            if (file[0] == searchedFile) {
+                let filePath = this.filePath(searchedFile, file[1]);
+                await vscode.window.showTextDocument(vscode.Uri.file(filePath));
+                return;
+            }
+        }
+        this.showErrorMesage();
+    }
+
 }
 
 module.exports = SystemExecutor;
