@@ -1,0 +1,97 @@
+[   {        
+        "intent": "gitCommit",        
+        "language": "en-us",        
+        "text": "Commit with message fix bug",        
+        "entities": [            
+            {                
+                "category": "commitMessage",                
+                "offset": 18,                
+                "length": 7           
+            }        
+        ]
+    },
+    {
+        "intent": "gitCommit",
+        "language": "en-us",
+        "text": "Commit changes with message add new feature",
+        "entities": [
+            {
+                "category": "commitMessage",
+                "offset": 10,
+                "length": 5
+            }
+        ]
+    },
+    {
+        "intent": "gitCommit",
+        "language": "en-us",
+        "text": "Add files and commit with message initial commit'",
+        "entities": [
+            {
+                "category": "commitMessage",
+                "offset": 33,
+                "length": 14
+            }
+        ]
+    },
+    {
+        "intent": "gitCommit",
+        "language": "en-us",
+        "text": "Update README and commit with message update documentation",
+        "entities": [
+            {
+                "category": "commitMessage",
+                "offset": 38,
+                "length": 20
+            }
+        ]
+    },
+    {
+        "intent": "gitCommit",
+        "language": "en-us",
+        "text": "Commit with message refactor code",
+        "entities": [
+            {
+                "category": "commitMessage",
+                "offset": 18,
+                "length": 12
+            }
+        ]
+    },
+    {
+        "intent": "gitCommit",
+        "language": "en-us",
+        "text": "Commit with refactor code",
+        "entities": [
+            {
+                "category": "commitMessage",
+                "offset": 5,
+                "length": 5
+            }
+        ]
+    },
+    {
+        "intent": "gitCommit",
+        "language": "en-us",
+        "text": "Git commit with message refactor code",
+        "entities": [
+            {
+                "category": "commitMessage",
+                "offset": 5,
+                "length": 5
+            }
+        ]
+    },
+    {
+        "intent": "gitCommit",
+        "language": "en-us",
+        "text": "Git commit fixes",
+        "entities": [
+            {
+                "category": "commitMessage",
+                "offset": 5,
+                "length": 5
+            }
+        ]
+    }
+]

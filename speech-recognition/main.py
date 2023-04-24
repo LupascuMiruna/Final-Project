@@ -81,7 +81,7 @@ class Listener:
         for entity in entities:
             resulted_arguments[entity['category']] = entity['text']
             
-        if(result["result"]["prediction"]["intents"][0]["confidenceScore"] > 0.8):    
+        if(result["result"]["prediction"]["intents"][0]["confidenceScore"] > 0.5):    
             return result["result"]["prediction"]["topIntent"], resulted_arguments
         # result["result"]["prediction"]["entities"]
         return '', []
@@ -92,7 +92,7 @@ class Listener:
 
         while (self.continue_listening(alternatives)):
             alternatives = self.speech_to_text()
-            if len(alternatives) > 0 and self.should_continue == True:
+            if len(alternatives[0]) > 0 and self.should_continue == True:
                 method, argvs = self.get_intents(alternatives)
                 self.sio.emit('onCommand', {'alternatives': alternatives, 'method': method, 'argvs': argvs})
 

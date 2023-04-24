@@ -1,0 +1,61 @@
+[    {        
+        "intent": "gitCheckout",        
+        "language": "en-us",        
+        "text": "Switch to the develop branch",        
+        "entities": [            
+            {                
+              "category": "branchName",                
+              "offset": 13,                
+              "length": 6            
+            }        
+        ]
+    },
+    {
+        "intent": "gitCheckout",
+        "language": "en-us",
+        "text": "Checkout the feature-123 branch",
+        "entities": [
+            {
+                "category": "branchName",
+                "offset": 14,
+                "length": 10
+            }
+        ]
+    },
+    {
+        "intent": "gitCheckout",
+        "language": "en-us",
+        "text": "Change to the release/v2.1.0 branch",
+        "entities": [
+            {
+                "category": "branchName",
+                "offset": 19,
+                "length": 12
+            }
+        ]
+    },
+    {
+        "intent": "gitCheckout",
+        "language": "en-us",
+        "text": "Switch to the hotfix/fix-bug-1234 branch",
+        "entities": [
+            {
+                "category": "branchName",
+                "offset": 13,
+                "length": 24
+            }
+        ]
+    },
+    {
+        "intent": "gitCheckout",
+        "language": "en-us",
+        "text": "I need to work on the feature/new-feature branch",
+        "entities": [
+            {
+                "category": "branchName",
+                "offset": 26,
+                "length": 13
+            }
+        ]
+    }
+]

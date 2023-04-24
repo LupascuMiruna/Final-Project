@@ -27,7 +27,7 @@ class Dispatcher {
 
     _getCurrentExecutor() {
         const currentLanguage = vscode.window.activeTextEditor.document.languageId;
-        return this.executors[currentLanguage];
+        return this.executors[currentLanguage] || this.executors.system;
     }
 
     dispatch(alternatives, method, argvs) {
