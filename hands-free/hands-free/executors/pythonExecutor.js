@@ -85,7 +85,7 @@ class PythonExecutor extends LanguageExecutor {
     // return string my string --> "my string"
     // return number 12 --> 12
     // return my variable --> myVariable
-    addReturn(argvs) {
+    async addReturn(argvs) {
         const variableName = this.evaluateTypeParameter(argvs);
         let compiled = _.template('return {{variableName}} ');
         const text = compiled({ variableName: variableName });
@@ -153,7 +153,7 @@ class PythonExecutor extends LanguageExecutor {
 
         // loop data in data center
         // loop data in range data_center
-        async loop(argvs){
+    async loop(argvs){
         const indexIn = argvs.indexOf('in');
         const iteratorName = _.snakeCase(argvs.slice(0,indexIn).join(' '));
         
@@ -170,7 +170,6 @@ class PythonExecutor extends LanguageExecutor {
         }
         const text = compiled({iteratorName: iteratorName, objectToLook: objectToLook});
         this.insertText(text);
-        // await this._executeCommand('cursorDown');
     }
 
      // find & select

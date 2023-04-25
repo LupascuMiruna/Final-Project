@@ -1,0 +1,89 @@
+[
+    {
+        "intent": "addClass",
+        "language": "en-us",
+        "text": "Create a class named Car",
+        "entities": [
+
+        ]
+    },
+    {
+        "intent": "addClass",
+        "language": "en-us",
+        "text": "Add a new class called Animal",
+        "entities": [
+          
+        ]
+    },
+    {
+        "intent": "addClass",
+        "language": "en-us",
+        "text": "Make a class named Book",
+        "entities": [
+         
+        ]
+    },
+    {
+        "intent": "addClass",
+        "language": "en-us",
+        "text": "Create a class called Shape",
+        "entities": [
+           
+        ]
+    },
+    {
+        "intent": "addClass",
+        "language": "en-us",
+        "text": "Add a new class named Person",
+        "entities": [
+            
+        ]
+    },
+    {
+        "intent": "addClass",
+        "language": "en-us",
+        "text": "Make a class called Fruit",
+        "entities": [
+           
+        ]
+    },
+    {
+        "intent": "addClass",
+        "language": "en-us",
+        "text": "Create a new class with the name Movie",
+        "entities": [
+        ]
+    },
+    {
+        "intent": "addClass",
+        "language": "en-us",
+        "text": "Add a class with the name Animal",
+        "entities": [
+         
+        ]
+    },
+    {
+        "intent": "addClass",
+        "language": "en-us",
+        "text": "Make a class named Dog",
+        "entities": [
+           
+        ]
+    },
+    {
+        "intent": "addClass",
+        "language": "en-us",
+        "text": "Create a class with the name Customer",
+        "entities": [
+      
+        ]
+    },
+    {
+        "intent": "addClass",
+        "language": "en-us",
+        "text": "Add a new class named Car",
+        "entities": [
+          
+        ]
+    }
+]

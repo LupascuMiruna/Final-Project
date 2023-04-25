@@ -5,15 +5,14 @@ const wordsToNumbers = require('words-to-numbers');
 const commands = require('./commands.json');
 const languages = require('./languages.json');
 const HtmlExecutor = require('./executors/htmlExecutor');
-const PythonExecutor = require('./executors/pythonExecutor');
 const SystemWrapper = require('./executors/systemWrapper');
+const PythonWrapper = require('./executors/pythonWrapper');
 
 class Dispatcher {
     constructor(executors) {
         this.executors = executors;
         this.languages = languages;
-
-        // this._initCommands();
+        this.commands = commands;
     }
 
     // hard to pass argvs because already parsed
@@ -43,7 +42,8 @@ class Dispatcher {
                 console.log('Command not found');
             }
             else {
-                currentExecutor[method]("", argvs);
+                argvs.useCLU = true;
+                currentExecutor[method]([""], argvs);
             }
         }
         else {
@@ -85,7 +85,8 @@ class Dispatcher {
                     if(words[index-1] == 'else') {
                         index--;
                     }
-                    currentExecutor[resultAtPath](words.slice(index + 1), []);
+                    argvs.useCLU = false;
+                    currentExecutor[resultAtPath](words.slice(index + 1), argvs);
                     break;
                 }
             }
@@ -96,6 +97,6 @@ class Dispatcher {
 
 module.exports = new Dispatcher({
     html: new HtmlExecutor(),
-    python: new PythonExecutor(),
+    python: new PythonWrapper(),
     system: new SystemWrapper(),
 });

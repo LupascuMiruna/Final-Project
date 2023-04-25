@@ -1,0 +1,72 @@
+[
+    
+    {
+    "text": "Open function create order",
+    "intent": "goFunction",
+    "entities": [
+    ]
+    },
+    {
+    "text": "Jump to function delete order",
+    "intent": "goFunction",
+    "entities": [
+       
+    ]
+    },
+    {
+    "text": "Find function update order",
+    "intent": "goFunction",
+    "entities": [
+      
+    ]
+    },
+    {
+    "text": "Navigate to function processPayment",
+    "intent": "goFunction",
+    "entities": [
+     
+    ]
+    },
+    {
+    "text": "Goto function apply discount",
+    "intent": "goFunction",
+    "entities": [
+      
+    ]
+    },
+    {
+    "text": "Move to function view cart",
+    "intent": "goFunction",
+    "entities": [
+       
+    ]
+    },
+    {
+    "text": "Jump function view order",
+    "intent": "goFunction",
+    "entities": [
+      
+    ]
+    },
+    {
+    "text": "Navigate function place item",
+    "intent": "goFunction",
+    "entities": [
+       
+    ]
+    },
+    {
+    "text": "Go function remove item",
+    "intent": "goFunction",
+    "entities": [
+      
+    ]
+    },
+    {
+    "text": "Find and open function confirm order",
+    "intent": "goFunction",
+    "entities": [
+        
+    ]
+    }
+]

@@ -1,0 +1,82 @@
+[   {        
+        "intent": "addComment",        
+        "language": "en-us",        
+        "text": "Add a comment to do later",        
+        "entities": [            
+        
+        ]
+    },
+    {
+        "intent": "addComment",
+        "language": "en-us",
+        "text": "Put a comment to do",
+        "entities": [
+      
+        ]
+    },
+    {
+        "intent": "addComment",
+        "language": "en-us",
+        "text": "Insert a comment fixes",
+        "entities": [
+       
+        ]
+    },
+    {
+        "intent": "addComment",
+        "language": "en-us",
+        "text": "Add a to do comment",
+        "entities": [
+          
+        ]
+    },
+    {
+        "intent": "addComment",
+        "language": "en-us",
+        "text": "Comment here in progress",
+        "entities": [
+       
+        ]
+    },
+    {
+        "intent": "addComment",
+        "language": "en-us",
+        "text": "Add a note feature in progress",
+        "entities": [
+          
+        ]
+    },
+    {
+        "intent": "addComment",
+        "language": "en-us",
+        "text": "Add a remark",
+        "entities": [
+     
+        ]
+    },
+    {
+        "intent": "addComment",
+        "language": "en-us",
+        "text": "Leave a comment work in progress",
+        "entities": [
+          
+        ]
+    },
+    {
+        "intent": "addComment",
+        "language": "en-us",
+        "text": "Write a comment work",
+        "entities": [
+            
+        ]
+    },
+    {
+        "intent": "addComment",
+        "language": "en-us",
+        "text": "Add a note to this line work in progress",
+        "entities": [
+        
+        ]
+    }
+]
+    

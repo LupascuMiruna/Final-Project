@@ -12,7 +12,7 @@ deployment_name = os.environ["AZURE_CONVERSATIONS_DEPLOYMENT_NAME"]
 # analyze quey
 client = ConversationAnalysisClient(clu_endpoint, AzureKeyCredential(clu_key))
 with client:
-    query = "please continue debug"
+    query = "switch test branch"
     result = client.analyze_conversation(
         task={
             "kind": "Conversation",
@@ -35,4 +35,3 @@ with client:
     )
 
     print(result)
-    

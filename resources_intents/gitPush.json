@@ -1,0 +1,92 @@
+[
+    {
+        "intent": "gitPush",
+        "text": "Push changes",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Push to origin",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Push to master",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Push to main",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Push my commits",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Push my changes to the server",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Push to the remote repo",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Send my code to the remote",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Send my commits to the server",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Push my changes to the master branch",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Push my changes to the main branch",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Push my code to the remote repo",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Send my commits to the remote repo",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Push to the server",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Push my changes to the develop branch",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Send my code to the develop branch",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Push to the origin server",
+        "entities": []
+    },
+    {
+        "intent": "gitPush",
+        "text": "Send my commits to the origin server",
+        "entities": []
+    }
+]
