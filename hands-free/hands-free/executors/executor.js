@@ -82,7 +82,6 @@ class Executor {
       return;
     }
   }
-
  
   _getTextEditor() {
     return vscode.window.activeTextEditor;
@@ -112,7 +111,7 @@ class Executor {
     this.insertText(content);
   }
 
-  showErrorMesage(message = "Incorect format, please review the rules") {
+  showErrorMesage(message = "Incorrect format, please review the rules") {
     vscode.window.showInformationMessage(message);
   }
 
