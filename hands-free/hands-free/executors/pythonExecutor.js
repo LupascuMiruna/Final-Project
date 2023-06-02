@@ -32,6 +32,10 @@ class PythonExecutor extends LanguageExecutor {
     }
 
     addClass(argvs) {
+        if(argvs === ''){
+            this.showErrorMesage();
+            return;
+        }
         const className = _.capitalize(_.camelCase(argvs.join(' ')));
         let compiled = _.template('class {{className}}:');
         const text = compiled({ className: className });
@@ -230,6 +234,21 @@ class PythonExecutor extends LanguageExecutor {
         const functionName = _.camelCase(argvs.join(' '));
         let compiled = _.template('def {{functionName}}():');
         const text = compiled({ functionName: functionName });
+        this.insertText(text);
+    }
+
+    callFunction(argvs) {
+        const functionName = _.camelCase(argvs.join(' '));
+        let compiled = _.template('{{functionName}}()');
+        const text = compiled({ functionName: functionName });
+        this.insertText(text);
+    }
+
+    printData(argvs) // just for variables
+    {
+        const data = _.camelCase(argvs.join(' '));
+        let compiled = _.template('print({{data}})');
+        const text = compiled({ data: data });
         this.insertText(text);
     }
 }

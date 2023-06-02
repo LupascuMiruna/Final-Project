@@ -1,6 +1,6 @@
-# hands-free README
+# VoiceCoder README
 
-This is the README for your extension "hands-free". After writing up a brief description, we recommend including the following sections.
+"Voice Coder" is an extension designed for Visual Studio Code users, aimed to integrate new technologies from the Artificial Intelligence and Natural Language Processing (NLP) fields into the software development routine. Therefore, this application offers the possibility to write and maintain code through voice commands, redefining and innovating the concept of programming as we know it today.
 
 ## Features
 

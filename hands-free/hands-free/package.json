@@ -1,7 +1,8 @@
 {
   "name": "hands-free",
-  "displayName": "hands-free",
-  "description": "",
+  "displayName": "VoiceCoder",
+  "publisher": "MirunaLicenta",
+  "description": "Voice Coder is an extension designed for Visual Studio Code users, aimed to integrate new technologies from the Artificial Intelligence and Natural Language Processing (NLP) fields into the software development routine. Therefore, this application offers the possibility to write and maintain code through voice commands, redefining and innovating the concept of programming as we know it today.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.73.0"
@@ -9,6 +10,11 @@
   "categories": [
     "Other"
   ],
+  "icon": "images/icon.jpeg",
+  "galleryBanner": {
+    "color": "#C80000",
+    "theme": "dark"
+  },
   "activationEvents": [
     "onCommand:hands-free.helloWorld",
     "onCommand:hands-free.trial",

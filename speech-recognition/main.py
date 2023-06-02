@@ -81,7 +81,7 @@ class Listener:
         for entity in entities:
             resulted_arguments[entity['category']] = entity['text']
             
-        if(result["result"]["prediction"]["intents"][0]["confidenceScore"] > 0.7):    
+        if(result["result"]["prediction"]["intents"][0]["confidenceScore"] > 0.85):    
             return result["result"]["prediction"]["topIntent"], resulted_arguments
         # result["result"]["prediction"]["entities"]
         return '', {}

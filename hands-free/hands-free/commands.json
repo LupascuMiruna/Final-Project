@@ -108,5 +108,8 @@
 		"commit": "gitCommit",
 		"pull": "gitPull"
 	},
-	"test": "test"
+	"test": "test",
+	"call": "callFunction",
+	"print": "printData"
+	
 }
