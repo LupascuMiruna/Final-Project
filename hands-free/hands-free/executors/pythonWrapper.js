@@ -11,7 +11,7 @@ class PythonWrapper extends PythonExecutor {
     
     getParams(options, paramName) {
         if(options[paramName]) {
-            return options['paramName'].split(" ");
+            return (options[paramName]).split(" ");
         }
         return ''
         
@@ -27,6 +27,12 @@ class PythonWrapper extends PythonExecutor {
         let argvs;
         argvs = this.useCLU(options)? this.getParams(options, 'functionName') : sentence;
         super.goFunction(argvs)
+    }
+
+    addFunction(sentence, options) {
+        let argvs;
+        argvs = this.useCLU(options)? this.getParams(options, 'functionName') : sentence;
+        super.addFunction(argvs)
     }
 
     addClass(sentence, options) {

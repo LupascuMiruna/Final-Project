@@ -1,5 +1,5 @@
 const vscode = require('vscode');
-
+const _ = require('lodash');
 const Executor = require('./executor');
 
 class LanguageExecutor extends Executor{
