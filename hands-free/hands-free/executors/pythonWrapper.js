@@ -47,6 +47,20 @@ class PythonWrapper extends PythonExecutor {
         super.addMethod(argvs)
     }
 
+    assignValue(sentence, options) {
+        let argvs, leftSide, rightSide;
+        if(this.useCLU(options)) {
+            leftSide =  this.getParams(options, 'leftSide');
+            rightSide =  this.getParams(options, 'rightSide')
+            const compiled = _.template('{{leftSide}} = {{rightSide}}');
+            const text = compiled({ leftSide: leftSide, rightSide: rightSide});
+            this.insertText(text);
+        }
+        else {
+            super.assignValue(argvs)
+        }
+    }
+
 
 }
 

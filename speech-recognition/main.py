@@ -29,6 +29,7 @@ class Listener:
             subscription=AZURE_SUBSCRIPTION_KEY, 
             region=AZURE_REGION
         )
+        speech_config._properties.set_property_by_name('output_format', 'true')
         self.speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
         self.runner_thread = None
 
