@@ -57,7 +57,7 @@ class PythonWrapper extends PythonExecutor {
             this.insertText(text);
         }
         else {
-            super.assignValue(argvs)
+            super.assignValue(sentence)
         }
     }
 

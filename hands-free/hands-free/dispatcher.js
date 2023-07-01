@@ -39,7 +39,7 @@ class Dispatcher {
             
             // If there is not on the System executor, too, cosider that it doesn't exist.
             if (!currentExecutor[method]) {
-                vscode.window.showInformationMessage('Command not found');
+                vscode.window.showInformationMessage('Command not found: ' + alternatives);
                 console.log('Command not found');
             }
             else {
@@ -61,7 +61,7 @@ class Dispatcher {
                     const resultAtPath = _.get(this.commands, path);
 
                     if (!resultAtPath) {
-                        vscode.window.showInformationMessage('Command not found');
+                        vscode.window.showInformationMessage('Command not found: ' +alternative);
                         console.log('Command not found');
                         break;
                     }
@@ -77,7 +77,7 @@ class Dispatcher {
                     
                     // If there is not on the System executor, too, cosider that it doesn't exist.
                     if (!currentExecutor[resultAtPath]) {
-                        vscode.window.showInformationMessage('Command not found');
+                        vscode.window.showInformationMessage('Command not found: ' + alternative);
                         console.log('Command not found');
                         break;
                     }

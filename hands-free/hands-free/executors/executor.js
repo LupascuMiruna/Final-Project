@@ -78,7 +78,7 @@ class Executor {
       );
       await vscode.window.showTextDocument(vscode.Uri.file(filePath));
     } else {
-      this.showErrorMesage();
+      this.showErrorMesage(argvs.join(' '));
       return;
     }
   }
@@ -111,8 +111,9 @@ class Executor {
     this.insertText(content);
   }
 
-  showErrorMesage(message = "Incorrect format, please review the rules") {
-    vscode.window.showInformationMessage(message);
+  showErrorMesage(argvs = '') {
+    const message = "Incorrect format, please review the rules: "
+    vscode.window.showInformationMessage(message + argvs);
   }
 
   _changeCursorPosition(line, column) {
@@ -131,14 +132,14 @@ class Executor {
 
     if (argvs[0] === "line") {
       if (isNaN(parseInt(argvs[1]))) {
-        this.showErrorMesage();
+        this.showErrorMesage(argvs.join(' '));
         return;
       }
       nextLine = parseInt(argvs[1]) - 1;
       nextColumn = 0;
     } else if (argvs[0] === "column") {
       if (isNaN(parseInt(argvs[1]))) {
-        this.showErrorMesage();
+        this.showErrorMesage(argvs.join(' '));
         return;
       }
       nextColumn = parseInt(argvs[1]) - 1;
@@ -151,7 +152,7 @@ class Executor {
     } else if (argvs[0] === "down") {
       nextLine = nextLine + 1;
     } else {
-      this.showErrorMesage();
+      this.showErrorMesage(argvs.join(' '));
       return;
     }
     this._changeCursorPosition(nextLine, nextColumn);
@@ -175,7 +176,7 @@ class Executor {
     const stopLine = parseInt(argvs[5]);
 
     if (isNaN(startLine) || isNaN(stopLine)) {
-      this.showErrorMesage();
+      this.showErrorMesage(argvs.join(' '));
       return;
     }
     const startPosition = new vscode.Position(startLine - 1, 0);

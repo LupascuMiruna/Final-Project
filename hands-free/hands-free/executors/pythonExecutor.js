@@ -33,7 +33,7 @@ class PythonExecutor extends LanguageExecutor {
 
     addClass(argvs) {
         if(argvs === ''){
-            this.showErrorMesage();
+            this.showErrorMesage(argvs.join(' '));
             return;
         }
         const className = _.capitalize(_.camelCase(argvs.join(' ')));
@@ -55,7 +55,8 @@ class PythonExecutor extends LanguageExecutor {
         const regexForFunction = this.getRegexForFunction();
         const currentLine = this.getCursorPosition().line;
 
-        const textCurrentLine = vscode.workspace.textDocuments[0].lineAt(currentLine).text;
+        const textCurrentLine = vscode.window.activeTextEditor.document.lineAt(currentLine).text;
+
         let matches = [...textCurrentLine.matchAll(regexForFunction)];
         let foundSelections = this.matchRegex(matches);
         let activeText = this._getTextEditor();
@@ -191,7 +192,7 @@ class PythonExecutor extends LanguageExecutor {
             objectToFind = _.snakeCase(objectToFind);
         }
         else {
-            this.showErrorMesage();
+            this.showErrorMesage(argvs.join(' '));
         }
 
         let matches = [...allText.matchAll(new RegExp(`${objectToFind}`, 'gm'))];
@@ -220,7 +221,7 @@ class PythonExecutor extends LanguageExecutor {
             indexTo = argvs.indexOf('to');
         }
         else {
-            this.showErrorMesage();
+            this.showErrorMesage(argvs.join(' '));
         }
         const leftSide = argvs.slice(indexTo + 1).join(' ');
         const rightSide = argvs.slice(0, indexTo).join(' ');

@@ -84,7 +84,7 @@ class SystemExecutor extends Executor {
                 return;
             }
         }
-        this.showErrorMesage();
+        this.showErrorMesage(sentence.join(' '));
     }
 
     async quickOpen() {
